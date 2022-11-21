@@ -1,0 +1,27 @@
+{
+  "name": "croker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "prestart": "npm run build",
+    "build": "tsc"
+  },
+  "keywords": [
+    "bist100",
+    "broker"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "prisma": "^4.6.1"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.6.1",
+    "@types/cheerio": "^0.22.31",
+    "axios": "^1.1.3",
+    "cheerio": "^1.0.0-rc.12",
+    "pdfjs-dist": "^3.0.279"
+  }
+}

@@ -1,0 +1,25 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model VaultType {
+  Id Int @id @default(autoincrement())
+  Name String 
+  Values VaultValues[]
+}
+
+model VaultValues {
+  Id Int @id @default(autoincrement())
+  Name String
+  Type VaultType @relation(fields: [VaultTypeId], references: [Id])
+  VaultTypeId Int
+
+}
