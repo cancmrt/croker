@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/prisma-client"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model VaultType {
+  Id Int @id @default(autoincrement())
+  Name String 
+  IsDeleted Boolean
+  Values VaultValues[]
+}
+
+model VaultValues {
+  Id Int @id @default(autoincrement())
+  Name String
+  Type VaultType @relation(fields: [VaultTypeId], references: [Id])
+  VaultTypeId Int
+  DateOfValue DateTime
+  IsDeleted Boolean
+
+}
+
+model Jobs {
+
+  Id Int @id @default(autoincrement())
+  Name String
+  ExecuterClass String
+  ExecuteCronTime String
+  IsDeleted Boolean
+  IsActive Boolean
+  IsRunningNow Boolean
+  Params JobParams[]
+  Logs JobLogs[]
+
+}
+
+model JobParams{
+  Id Int @id @default(autoincrement())
+  Name String
+  Value String
+  IsDeleted Boolean
+  Job Jobs @relation(fields: [JobId], references: [Id])
+  JobId Int
+}
+
+model JobLogs{
+  Id Int @id @default(autoincrement())
+  Job Jobs @relation(fields: [JobId], references: [Id])
+  JobId Int
+  ExecuteTime DateTime
+  IsError Boolean
+  Error String
+}
