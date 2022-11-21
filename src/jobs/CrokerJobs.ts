@@ -1,18 +1,20 @@
 
-import { Jobs, PrismaClient } from '../prisma-client'
-import { CronCommand, CronJob } from 'cron';
+import { Jobs, Prisma, PrismaClient } from '../prisma-client'
+import { CronJob } from 'cron';
 
 export abstract class CrokerJobs{
 
     private Client:PrismaClient;
     private Name:string;
     private CrokerCronJob:CronJob | undefined;
-    public Job:Jobs | null;
+    private jobsWithParams = Prisma.validator<Prisma.JobsArgs>()({
+        include: { Params: true },
+    });
+    public Job:Prisma.JobsGetPayload<typeof this.jobsWithParams> | undefined;
 
     constructor(JobName:string){
         this.Name = JobName;
         this.Client = new PrismaClient();
-        this.Job = null;
         this.JobAssigner();
     }
 
@@ -34,8 +36,14 @@ export abstract class CrokerJobs{
 
     public Start(){
 
-        if(this.Job !== null){
-            this.CrokerCronJob = new CronJob(this.Job.ExecuteCronTime,this.Run,this.Completed);
+        if(this.Job !== undefined){
+            if(this.CrokerCronJob === undefined){
+                this.CrokerCronJob = new CronJob(this.Job.ExecuteCronTime,this.Run,this.Completed);
+            }
+            this.CrokerCronJob.start();
+        }
+        else{
+            throw Error("Bulunamayan job başlatılamaz");
         }
         
     }
@@ -44,10 +52,13 @@ export abstract class CrokerJobs{
         if(this.CrokerCronJob !== null){
             this.CrokerCronJob?.stop();
         }
+        else{
+            throw Error("Bulunamayan job durdurulamaz");
+        }
     }
 
-    public abstract Run: CronCommand;
-    public abstract Completed: CronCommand;
+    public abstract Run(): Promise<void>;
+    public abstract Completed(): Promise<void>;
 
 
 }

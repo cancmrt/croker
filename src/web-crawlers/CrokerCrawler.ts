@@ -2,19 +2,19 @@ import cheerio from 'cheerio'
 import axios from 'axios'
 
 
-export enum MethodType {
-    GET,
-    POST
+export enum HttpMethodType {
+    GET = "GET",
+    POST = "POST"
 }
 
 export type CrawlerLoader = {
     URL:string,
-    Method:MethodType
+    HttpMethod:HttpMethodType
 
 };
 export type CrawlerResult = {
     URL:string,
-    Method:MethodType,
+    HttpMethod:HttpMethodType,
     PageHTML:string,
     Document:ReturnType<typeof cheerio.load>
     IsError:boolean
@@ -30,7 +30,7 @@ export class CrokerCrawler{
     public async Load(el:CrawlerLoader):Promise<CrawlerResult>{
         let result:CrawlerResult = {
             URL:el.URL,
-            Method: el.Method,
+            HttpMethod: el.HttpMethod,
             PageHTML:"",
             Document: cheerio.load("<br/>"),
             IsError: false,
@@ -39,10 +39,10 @@ export class CrokerCrawler{
         
         try{
             let URLResponse:any;
-            if(el.Method == MethodType.GET){
+            if(el.HttpMethod == HttpMethodType.GET){
                 URLResponse = await axios.get(el.URL);
             }
-            else if(el.Method == MethodType.POST){
+            else if(el.HttpMethod == HttpMethodType.POST){
                 URLResponse = await axios.post(el.URL);
             }
             result.PageHTML = URLResponse.data

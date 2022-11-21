@@ -1,4 +1,4 @@
-import { BISTStaticValueCrawler } from "./web-crawlers/bist/BISTStaticValueCrawler";
+import { BistStaticValueGetter } from "./jobs/croker-jobs/BistStaticValueGetter";
 
-var bistCrawler = new BISTStaticValueCrawler();
-bistCrawler.Run();
+let job = new BistStaticValueGetter("BIST Daily Values Getter")
+job.Start();
