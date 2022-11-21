@@ -166,7 +166,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\ccomert\\Desktop\\croker\\croker\\src\\prisma-client",
+      "value": "C:\\Users\\Administrator\\Desktop\\croker\\src\\prisma-client",
       "fromEnvVar": null
     },
     "config": {
