@@ -24,9 +24,10 @@ export class JobsRunner{
 
         allJobs.forEach((job)=>{
             import("./croker-jobs/"+job.ExecuterClass)
-            .then(jobClass => {
+            .then(async jobClass => {
                 let createdClass = new jobClass[job.ExecuterClass](job.Name);
-                createdClass.Start();
+                await createdClass.Start();
+                global.InitializedCrokerJobs.push(createdClass);
             })
             .catch(err => {
                 console.log(err);

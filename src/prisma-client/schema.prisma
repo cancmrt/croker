@@ -56,7 +56,8 @@ model JobLogs{
   Id Int @id @default(autoincrement())
   Job Jobs @relation(fields: [JobId], references: [Id])
   JobId Int
+  Message String
   ExecuteTime DateTime
   IsError Boolean
-  Error String
+  IsWarning Boolean
 }

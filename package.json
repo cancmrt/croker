@@ -2,9 +2,9 @@
   "name": "croker",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "node dist/app.js",
     "prestart": "npm run build",
     "build": "tsc && npm run cpdir",
     "cpdir": "xcopy  \"src/prisma-client\" \"dist/prisma-client\" /I /S /C /Y"

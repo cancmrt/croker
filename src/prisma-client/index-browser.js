@@ -92,9 +92,10 @@ function makeEnum(x) { return x; }
 exports.Prisma.JobLogsScalarFieldEnum = makeEnum({
   Id: 'Id',
   JobId: 'JobId',
+  Message: 'Message',
   ExecuteTime: 'ExecuteTime',
   IsError: 'IsError',
-  Error: 'Error'
+  IsWarning: 'IsWarning'
 });
 
 exports.Prisma.JobParamsScalarFieldEnum = makeEnum({

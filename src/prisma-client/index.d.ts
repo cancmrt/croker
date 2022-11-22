@@ -68,9 +68,10 @@ export type JobParams = {
 export type JobLogs = {
   Id: number
   JobId: number
+  Message: string
   ExecuteTime: Date
   IsError: boolean
-  Error: string
+  IsWarning: boolean
 }
 
 
@@ -4764,25 +4765,28 @@ export namespace Prisma {
   export type JobLogsMinAggregateOutputType = {
     Id: number | null
     JobId: number | null
+    Message: string | null
     ExecuteTime: Date | null
     IsError: boolean | null
-    Error: string | null
+    IsWarning: boolean | null
   }
 
   export type JobLogsMaxAggregateOutputType = {
     Id: number | null
     JobId: number | null
+    Message: string | null
     ExecuteTime: Date | null
     IsError: boolean | null
-    Error: string | null
+    IsWarning: boolean | null
   }
 
   export type JobLogsCountAggregateOutputType = {
     Id: number
     JobId: number
+    Message: number
     ExecuteTime: number
     IsError: number
-    Error: number
+    IsWarning: number
     _all: number
   }
 
@@ -4800,25 +4804,28 @@ export namespace Prisma {
   export type JobLogsMinAggregateInputType = {
     Id?: true
     JobId?: true
+    Message?: true
     ExecuteTime?: true
     IsError?: true
-    Error?: true
+    IsWarning?: true
   }
 
   export type JobLogsMaxAggregateInputType = {
     Id?: true
     JobId?: true
+    Message?: true
     ExecuteTime?: true
     IsError?: true
-    Error?: true
+    IsWarning?: true
   }
 
   export type JobLogsCountAggregateInputType = {
     Id?: true
     JobId?: true
+    Message?: true
     ExecuteTime?: true
     IsError?: true
-    Error?: true
+    IsWarning?: true
     _all?: true
   }
 
@@ -4917,9 +4924,10 @@ export namespace Prisma {
   export type JobLogsGroupByOutputType = {
     Id: number
     JobId: number
+    Message: string
     ExecuteTime: Date
     IsError: boolean
-    Error: string
+    IsWarning: boolean
     _count: JobLogsCountAggregateOutputType | null
     _avg: JobLogsAvgAggregateOutputType | null
     _sum: JobLogsSumAggregateOutputType | null
@@ -4945,9 +4953,10 @@ export namespace Prisma {
     Id?: boolean
     Job?: boolean | JobsArgs
     JobId?: boolean
+    Message?: boolean
     ExecuteTime?: boolean
     IsError?: boolean
-    Error?: boolean
+    IsWarning?: boolean
   }
 
 
@@ -5678,9 +5687,10 @@ export namespace Prisma {
   export const JobLogsScalarFieldEnum: {
     Id: 'Id',
     JobId: 'JobId',
+    Message: 'Message',
     ExecuteTime: 'ExecuteTime',
     IsError: 'IsError',
-    Error: 'Error'
+    IsWarning: 'IsWarning'
   };
 
   export type JobLogsScalarFieldEnum = (typeof JobLogsScalarFieldEnum)[keyof typeof JobLogsScalarFieldEnum]
@@ -5960,18 +5970,20 @@ export namespace Prisma {
     Id?: IntFilter | number
     Job?: XOR<JobsRelationFilter, JobsWhereInput>
     JobId?: IntFilter | number
+    Message?: StringFilter | string
     ExecuteTime?: DateTimeFilter | Date | string
     IsError?: BoolFilter | boolean
-    Error?: StringFilter | string
+    IsWarning?: BoolFilter | boolean
   }
 
   export type JobLogsOrderByWithRelationInput = {
     Id?: SortOrder
     Job?: JobsOrderByWithRelationInput
     JobId?: SortOrder
+    Message?: SortOrder
     ExecuteTime?: SortOrder
     IsError?: SortOrder
-    Error?: SortOrder
+    IsWarning?: SortOrder
   }
 
   export type JobLogsWhereUniqueInput = {
@@ -5981,9 +5993,10 @@ export namespace Prisma {
   export type JobLogsOrderByWithAggregationInput = {
     Id?: SortOrder
     JobId?: SortOrder
+    Message?: SortOrder
     ExecuteTime?: SortOrder
     IsError?: SortOrder
-    Error?: SortOrder
+    IsWarning?: SortOrder
     _count?: JobLogsCountOrderByAggregateInput
     _avg?: JobLogsAvgOrderByAggregateInput
     _max?: JobLogsMaxOrderByAggregateInput
@@ -5997,9 +6010,10 @@ export namespace Prisma {
     NOT?: Enumerable<JobLogsScalarWhereWithAggregatesInput>
     Id?: IntWithAggregatesFilter | number
     JobId?: IntWithAggregatesFilter | number
+    Message?: StringWithAggregatesFilter | string
     ExecuteTime?: DateTimeWithAggregatesFilter | Date | string
     IsError?: BoolWithAggregatesFilter | boolean
-    Error?: StringWithAggregatesFilter | string
+    IsWarning?: BoolWithAggregatesFilter | boolean
   }
 
   export type VaultTypeCreateInput = {
@@ -6200,46 +6214,52 @@ export namespace Prisma {
 
   export type JobLogsCreateInput = {
     Job: JobsCreateNestedOneWithoutLogsInput
+    Message: string
     ExecuteTime: Date | string
     IsError: boolean
-    Error: string
+    IsWarning: boolean
   }
 
   export type JobLogsUncheckedCreateInput = {
     Id?: number
     JobId: number
+    Message: string
     ExecuteTime: Date | string
     IsError: boolean
-    Error: string
+    IsWarning: boolean
   }
 
   export type JobLogsUpdateInput = {
     Job?: JobsUpdateOneRequiredWithoutLogsNestedInput
+    Message?: StringFieldUpdateOperationsInput | string
     ExecuteTime?: DateTimeFieldUpdateOperationsInput | Date | string
     IsError?: BoolFieldUpdateOperationsInput | boolean
-    Error?: StringFieldUpdateOperationsInput | string
+    IsWarning?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type JobLogsUncheckedUpdateInput = {
     Id?: IntFieldUpdateOperationsInput | number
     JobId?: IntFieldUpdateOperationsInput | number
+    Message?: StringFieldUpdateOperationsInput | string
     ExecuteTime?: DateTimeFieldUpdateOperationsInput | Date | string
     IsError?: BoolFieldUpdateOperationsInput | boolean
-    Error?: StringFieldUpdateOperationsInput | string
+    IsWarning?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type JobLogsUpdateManyMutationInput = {
+    Message?: StringFieldUpdateOperationsInput | string
     ExecuteTime?: DateTimeFieldUpdateOperationsInput | Date | string
     IsError?: BoolFieldUpdateOperationsInput | boolean
-    Error?: StringFieldUpdateOperationsInput | string
+    IsWarning?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type JobLogsUncheckedUpdateManyInput = {
     Id?: IntFieldUpdateOperationsInput | number
     JobId?: IntFieldUpdateOperationsInput | number
+    Message?: StringFieldUpdateOperationsInput | string
     ExecuteTime?: DateTimeFieldUpdateOperationsInput | Date | string
     IsError?: BoolFieldUpdateOperationsInput | boolean
-    Error?: StringFieldUpdateOperationsInput | string
+    IsWarning?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type IntFilter = {
@@ -6516,9 +6536,10 @@ export namespace Prisma {
   export type JobLogsCountOrderByAggregateInput = {
     Id?: SortOrder
     JobId?: SortOrder
+    Message?: SortOrder
     ExecuteTime?: SortOrder
     IsError?: SortOrder
-    Error?: SortOrder
+    IsWarning?: SortOrder
   }
 
   export type JobLogsAvgOrderByAggregateInput = {
@@ -6529,17 +6550,19 @@ export namespace Prisma {
   export type JobLogsMaxOrderByAggregateInput = {
     Id?: SortOrder
     JobId?: SortOrder
+    Message?: SortOrder
     ExecuteTime?: SortOrder
     IsError?: SortOrder
-    Error?: SortOrder
+    IsWarning?: SortOrder
   }
 
   export type JobLogsMinOrderByAggregateInput = {
     Id?: SortOrder
     JobId?: SortOrder
+    Message?: SortOrder
     ExecuteTime?: SortOrder
     IsError?: SortOrder
-    Error?: SortOrder
+    IsWarning?: SortOrder
   }
 
   export type JobLogsSumOrderByAggregateInput = {
@@ -6929,16 +6952,18 @@ export namespace Prisma {
   }
 
   export type JobLogsCreateWithoutJobInput = {
+    Message: string
     ExecuteTime: Date | string
     IsError: boolean
-    Error: string
+    IsWarning: boolean
   }
 
   export type JobLogsUncheckedCreateWithoutJobInput = {
     Id?: number
+    Message: string
     ExecuteTime: Date | string
     IsError: boolean
-    Error: string
+    IsWarning: boolean
   }
 
   export type JobLogsCreateOrConnectWithoutJobInput = {
@@ -6995,9 +7020,10 @@ export namespace Prisma {
     NOT?: Enumerable<JobLogsScalarWhereInput>
     Id?: IntFilter | number
     JobId?: IntFilter | number
+    Message?: StringFilter | string
     ExecuteTime?: DateTimeFilter | Date | string
     IsError?: BoolFilter | boolean
-    Error?: StringFilter | string
+    IsWarning?: BoolFilter | boolean
   }
 
   export type JobsCreateWithoutParamsInput = {
@@ -7148,23 +7174,26 @@ export namespace Prisma {
   }
 
   export type JobLogsUpdateWithoutJobInput = {
+    Message?: StringFieldUpdateOperationsInput | string
     ExecuteTime?: DateTimeFieldUpdateOperationsInput | Date | string
     IsError?: BoolFieldUpdateOperationsInput | boolean
-    Error?: StringFieldUpdateOperationsInput | string
+    IsWarning?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type JobLogsUncheckedUpdateWithoutJobInput = {
     Id?: IntFieldUpdateOperationsInput | number
+    Message?: StringFieldUpdateOperationsInput | string
     ExecuteTime?: DateTimeFieldUpdateOperationsInput | Date | string
     IsError?: BoolFieldUpdateOperationsInput | boolean
-    Error?: StringFieldUpdateOperationsInput | string
+    IsWarning?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type JobLogsUncheckedUpdateManyWithoutLogsInput = {
     Id?: IntFieldUpdateOperationsInput | number
+    Message?: StringFieldUpdateOperationsInput | string
     ExecuteTime?: DateTimeFieldUpdateOperationsInput | Date | string
     IsError?: BoolFieldUpdateOperationsInput | boolean
-    Error?: StringFieldUpdateOperationsInput | string
+    IsWarning?: BoolFieldUpdateOperationsInput | boolean
   }
 
 

@@ -36,7 +36,18 @@ export abstract class CrokerJobs{
 
         await this.Init();
         if(this.Job !== undefined){
-            
+            await this.Client?.$connect();
+            await this.Client?.jobLogs.create({
+                data:{
+                   ExecuteTime: new Date(),
+                   IsError: false,
+                   IsWarning: false,
+                   Message: "Job " + this.Job?.Name + " Started...",
+                   JobId : this.Job?.Id || 0
+    
+                }
+            });
+            await this.Client?.$disconnect();
             if(this.CrokerCronJob === undefined){
                 this.CrokerCronJob = new CronJob(this.Job.ExecuteCronTime,
                 async () => {
@@ -50,8 +61,48 @@ export abstract class CrokerJobs{
                           IsRunningNow:true
                         },
                     });
+                    await this.Client?.jobLogs.create({
+                        data:{
+                           ExecuteTime: new Date(),
+                           IsError: false,
+                           IsWarning: false,
+                           Message: "Job " + this.Job?.Name + " Run Start...",
+                           JobId : this.Job?.Id || 0
+            
+                        }
+                    });
                     await this.Client?.$disconnect();
-                    this.Run(this);
+                    try{
+                        this.Run(this);
+                        await this.Client?.$connect();
+                        await this.Client?.jobLogs.create({
+                            data:{
+                               ExecuteTime: new Date(),
+                               IsError: false,
+                               IsWarning: false,
+                               Message: "Job " + this.Job?.Name + " Run End...",
+                               JobId : this.Job?.Id || 0
+                
+                            }
+                        });
+                        await this.Client?.$disconnect();
+                        
+                    }
+                    catch(ex){
+                        await this.Client?.$connect();
+                        await this.Client?.jobLogs.create({
+                            data:{
+                               ExecuteTime: new Date(),
+                               IsError: true,
+                               IsWarning: false,
+                               Message: JSON.stringify(ex),
+                               JobId : this.Job?.Id || 0
+                
+                            }
+                        });
+                        await this.Client?.$disconnect();
+                    }
+                    
                     await this.Client?.$connect();
                     await this.Client?.jobs.update({
                         where: {
@@ -86,6 +137,16 @@ export abstract class CrokerJobs{
                     data: {
                       IsRunningNow:false
                     },
+                });
+                await this.Client?.jobLogs.create({
+                    data:{
+                    ExecuteTime: new Date(),
+                    IsError: false,
+                    IsWarning: false,
+                    Message: "Job " + this.Job?.Name + " Stopped...",
+                    JobId : this.Job?.Id || 0
+        
+                    }
                 });
                 await this.Client?.$disconnect();
             }
