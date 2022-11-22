@@ -133,6 +133,7 @@ exports.Prisma.VaultTypeScalarFieldEnum = makeEnum({
 exports.Prisma.VaultValuesScalarFieldEnum = makeEnum({
   Id: 'Id',
   Name: 'Name',
+  Value: 'Value',
   VaultTypeId: 'VaultTypeId',
   DateOfValue: 'DateOfValue',
   IsDeleted: 'IsDeleted'

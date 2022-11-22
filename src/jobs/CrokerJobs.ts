@@ -1,12 +1,13 @@
 
-import { Jobs, Prisma, PrismaClient } from '../prisma-client'
+import { Prisma, PrismaClient } from '../prisma-client'
 import { CronJob } from 'cron';
 
 export abstract class CrokerJobs{
 
-    private Client:PrismaClient;
+    private Client:PrismaClient | undefined;
     private Name:string;
     private CrokerCronJob:CronJob | undefined;
+
     private jobsWithParams = Prisma.validator<Prisma.JobsArgs>()({
         include: { Params: true },
     });
@@ -14,11 +15,11 @@ export abstract class CrokerJobs{
 
     constructor(JobName:string){
         this.Name = JobName;
-        this.Client = new PrismaClient();
-        this.JobAssigner();
     }
-
-    private async JobAssigner(){
+    
+    private async Init() {
+        this.Client = new PrismaClient();
+        await this.Client.$connect();
         this.Job = await this.Client.jobs.findFirstOrThrow({
             where:{
                 Name:{
@@ -29,16 +30,42 @@ export abstract class CrokerJobs{
                 Params:true
             }
         });
+        await this.Client.$disconnect();
     }
-    private InitJobSchedular(){
+    public async Start(){
 
-    }
-
-    public Start(){
-
+        await this.Init();
         if(this.Job !== undefined){
+            
             if(this.CrokerCronJob === undefined){
-                this.CrokerCronJob = new CronJob(this.Job.ExecuteCronTime,this.Run,this.Completed);
+                this.CrokerCronJob = new CronJob(this.Job.ExecuteCronTime,
+                async () => {
+
+                    await this.Client?.$connect();
+                    await this.Client?.jobs.update({
+                        where: {
+                          Id: this.Job?.Id
+                        },
+                        data: {
+                          IsRunningNow:true
+                        },
+                    });
+                    await this.Client?.$disconnect();
+                    this.Run(this);
+                    await this.Client?.$connect();
+                    await this.Client?.jobs.update({
+                        where: {
+                          Id: this.Job?.Id
+                        },
+                        data: {
+                          IsRunningNow:false
+                        },
+                    });
+                    await this.Client?.$disconnect();
+
+                },async () => {
+                    this.Completed(this);
+                });
             }
             this.CrokerCronJob.start();
         }
@@ -48,8 +75,20 @@ export abstract class CrokerJobs{
         
     }
 
-    public Stop(){
-        if(this.CrokerCronJob !== null){
+    public async Stop(){
+        if(this.CrokerCronJob !== undefined){
+            if(this.Job !== undefined){
+                await this.Client?.$connect();
+                await this.Client?.jobs.update({
+                    where: {
+                      Id: this.Job?.Id
+                    },
+                    data: {
+                      IsRunningNow:false
+                    },
+                });
+                await this.Client?.$disconnect();
+            }
             this.CrokerCronJob?.stop();
         }
         else{
@@ -57,8 +96,8 @@ export abstract class CrokerJobs{
         }
     }
 
-    public abstract Run(): Promise<void>;
-    public abstract Completed(): Promise<void>;
+    public abstract Run(BaseJob:CrokerJobs): Promise<void>;
+    public abstract Completed(BaseJob:CrokerJobs): Promise<void>;
 
 
 }

@@ -14,17 +14,18 @@ datasource db {
 model VaultType {
   Id Int @id @default(autoincrement())
   Name String 
-  IsDeleted Boolean
+  IsDeleted Boolean @default(false)
   Values VaultValues[]
 }
 
 model VaultValues {
   Id Int @id @default(autoincrement())
   Name String
+  Value String
   Type VaultType @relation(fields: [VaultTypeId], references: [Id])
   VaultTypeId Int
   DateOfValue DateTime
-  IsDeleted Boolean
+  IsDeleted Boolean @default(false)
 
 }
 
@@ -34,9 +35,9 @@ model Jobs {
   Name String
   ExecuterClass String
   ExecuteCronTime String
-  IsDeleted Boolean
-  IsActive Boolean
-  IsRunningNow Boolean
+  IsDeleted Boolean @default(false)
+  IsActive Boolean @default(true)
+  IsRunningNow Boolean @default(false)
   Params JobParams[]
   Logs JobLogs[]
 
@@ -46,7 +47,7 @@ model JobParams{
   Id Int @id @default(autoincrement())
   Name String
   Value String
-  IsDeleted Boolean
+  IsDeleted Boolean @default(false)
   Job Jobs @relation(fields: [JobId], references: [Id])
   JobId Int
 }

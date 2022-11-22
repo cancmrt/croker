@@ -29,6 +29,7 @@ export type VaultType = {
 export type VaultValues = {
   Id: number
   Name: string
+  Value: string
   VaultTypeId: number
   DateOfValue: Date
   IsDeleted: boolean
@@ -1943,6 +1944,7 @@ export namespace Prisma {
   export type VaultValuesMinAggregateOutputType = {
     Id: number | null
     Name: string | null
+    Value: string | null
     VaultTypeId: number | null
     DateOfValue: Date | null
     IsDeleted: boolean | null
@@ -1951,6 +1953,7 @@ export namespace Prisma {
   export type VaultValuesMaxAggregateOutputType = {
     Id: number | null
     Name: string | null
+    Value: string | null
     VaultTypeId: number | null
     DateOfValue: Date | null
     IsDeleted: boolean | null
@@ -1959,6 +1962,7 @@ export namespace Prisma {
   export type VaultValuesCountAggregateOutputType = {
     Id: number
     Name: number
+    Value: number
     VaultTypeId: number
     DateOfValue: number
     IsDeleted: number
@@ -1979,6 +1983,7 @@ export namespace Prisma {
   export type VaultValuesMinAggregateInputType = {
     Id?: true
     Name?: true
+    Value?: true
     VaultTypeId?: true
     DateOfValue?: true
     IsDeleted?: true
@@ -1987,6 +1992,7 @@ export namespace Prisma {
   export type VaultValuesMaxAggregateInputType = {
     Id?: true
     Name?: true
+    Value?: true
     VaultTypeId?: true
     DateOfValue?: true
     IsDeleted?: true
@@ -1995,6 +2001,7 @@ export namespace Prisma {
   export type VaultValuesCountAggregateInputType = {
     Id?: true
     Name?: true
+    Value?: true
     VaultTypeId?: true
     DateOfValue?: true
     IsDeleted?: true
@@ -2096,6 +2103,7 @@ export namespace Prisma {
   export type VaultValuesGroupByOutputType = {
     Id: number
     Name: string
+    Value: string
     VaultTypeId: number
     DateOfValue: Date
     IsDeleted: boolean
@@ -2123,6 +2131,7 @@ export namespace Prisma {
   export type VaultValuesSelect = {
     Id?: boolean
     Name?: boolean
+    Value?: boolean
     Type?: boolean | VaultTypeArgs
     VaultTypeId?: boolean
     DateOfValue?: boolean
@@ -5728,6 +5737,7 @@ export namespace Prisma {
   export const VaultValuesScalarFieldEnum: {
     Id: 'Id',
     Name: 'Name',
+    Value: 'Value',
     VaultTypeId: 'VaultTypeId',
     DateOfValue: 'DateOfValue',
     IsDeleted: 'IsDeleted'
@@ -5788,6 +5798,7 @@ export namespace Prisma {
     NOT?: Enumerable<VaultValuesWhereInput>
     Id?: IntFilter | number
     Name?: StringFilter | string
+    Value?: StringFilter | string
     Type?: XOR<VaultTypeRelationFilter, VaultTypeWhereInput>
     VaultTypeId?: IntFilter | number
     DateOfValue?: DateTimeFilter | Date | string
@@ -5797,6 +5808,7 @@ export namespace Prisma {
   export type VaultValuesOrderByWithRelationInput = {
     Id?: SortOrder
     Name?: SortOrder
+    Value?: SortOrder
     Type?: VaultTypeOrderByWithRelationInput
     VaultTypeId?: SortOrder
     DateOfValue?: SortOrder
@@ -5810,6 +5822,7 @@ export namespace Prisma {
   export type VaultValuesOrderByWithAggregationInput = {
     Id?: SortOrder
     Name?: SortOrder
+    Value?: SortOrder
     VaultTypeId?: SortOrder
     DateOfValue?: SortOrder
     IsDeleted?: SortOrder
@@ -5826,6 +5839,7 @@ export namespace Prisma {
     NOT?: Enumerable<VaultValuesScalarWhereWithAggregatesInput>
     Id?: IntWithAggregatesFilter | number
     Name?: StringWithAggregatesFilter | string
+    Value?: StringWithAggregatesFilter | string
     VaultTypeId?: IntWithAggregatesFilter | number
     DateOfValue?: DateTimeWithAggregatesFilter | Date | string
     IsDeleted?: BoolWithAggregatesFilter | boolean
@@ -5990,14 +6004,14 @@ export namespace Prisma {
 
   export type VaultTypeCreateInput = {
     Name: string
-    IsDeleted: boolean
+    IsDeleted?: boolean
     Values?: VaultValuesCreateNestedManyWithoutTypeInput
   }
 
   export type VaultTypeUncheckedCreateInput = {
     Id?: number
     Name: string
-    IsDeleted: boolean
+    IsDeleted?: boolean
     Values?: VaultValuesUncheckedCreateNestedManyWithoutTypeInput
   }
 
@@ -6027,21 +6041,24 @@ export namespace Prisma {
 
   export type VaultValuesCreateInput = {
     Name: string
+    Value: string
     Type: VaultTypeCreateNestedOneWithoutValuesInput
     DateOfValue: Date | string
-    IsDeleted: boolean
+    IsDeleted?: boolean
   }
 
   export type VaultValuesUncheckedCreateInput = {
     Id?: number
     Name: string
+    Value: string
     VaultTypeId: number
     DateOfValue: Date | string
-    IsDeleted: boolean
+    IsDeleted?: boolean
   }
 
   export type VaultValuesUpdateInput = {
     Name?: StringFieldUpdateOperationsInput | string
+    Value?: StringFieldUpdateOperationsInput | string
     Type?: VaultTypeUpdateOneRequiredWithoutValuesNestedInput
     DateOfValue?: DateTimeFieldUpdateOperationsInput | Date | string
     IsDeleted?: BoolFieldUpdateOperationsInput | boolean
@@ -6050,6 +6067,7 @@ export namespace Prisma {
   export type VaultValuesUncheckedUpdateInput = {
     Id?: IntFieldUpdateOperationsInput | number
     Name?: StringFieldUpdateOperationsInput | string
+    Value?: StringFieldUpdateOperationsInput | string
     VaultTypeId?: IntFieldUpdateOperationsInput | number
     DateOfValue?: DateTimeFieldUpdateOperationsInput | Date | string
     IsDeleted?: BoolFieldUpdateOperationsInput | boolean
@@ -6057,6 +6075,7 @@ export namespace Prisma {
 
   export type VaultValuesUpdateManyMutationInput = {
     Name?: StringFieldUpdateOperationsInput | string
+    Value?: StringFieldUpdateOperationsInput | string
     DateOfValue?: DateTimeFieldUpdateOperationsInput | Date | string
     IsDeleted?: BoolFieldUpdateOperationsInput | boolean
   }
@@ -6064,6 +6083,7 @@ export namespace Prisma {
   export type VaultValuesUncheckedUpdateManyInput = {
     Id?: IntFieldUpdateOperationsInput | number
     Name?: StringFieldUpdateOperationsInput | string
+    Value?: StringFieldUpdateOperationsInput | string
     VaultTypeId?: IntFieldUpdateOperationsInput | number
     DateOfValue?: DateTimeFieldUpdateOperationsInput | Date | string
     IsDeleted?: BoolFieldUpdateOperationsInput | boolean
@@ -6073,9 +6093,9 @@ export namespace Prisma {
     Name: string
     ExecuterClass: string
     ExecuteCronTime: string
-    IsDeleted: boolean
-    IsActive: boolean
-    IsRunningNow: boolean
+    IsDeleted?: boolean
+    IsActive?: boolean
+    IsRunningNow?: boolean
     Params?: JobParamsCreateNestedManyWithoutJobInput
     Logs?: JobLogsCreateNestedManyWithoutJobInput
   }
@@ -6085,9 +6105,9 @@ export namespace Prisma {
     Name: string
     ExecuterClass: string
     ExecuteCronTime: string
-    IsDeleted: boolean
-    IsActive: boolean
-    IsRunningNow: boolean
+    IsDeleted?: boolean
+    IsActive?: boolean
+    IsRunningNow?: boolean
     Params?: JobParamsUncheckedCreateNestedManyWithoutJobInput
     Logs?: JobLogsUncheckedCreateNestedManyWithoutJobInput
   }
@@ -6137,7 +6157,7 @@ export namespace Prisma {
   export type JobParamsCreateInput = {
     Name: string
     Value: string
-    IsDeleted: boolean
+    IsDeleted?: boolean
     Job: JobsCreateNestedOneWithoutParamsInput
   }
 
@@ -6145,7 +6165,7 @@ export namespace Prisma {
     Id?: number
     Name: string
     Value: string
-    IsDeleted: boolean
+    IsDeleted?: boolean
     JobId: number
   }
 
@@ -6348,6 +6368,7 @@ export namespace Prisma {
   export type VaultValuesCountOrderByAggregateInput = {
     Id?: SortOrder
     Name?: SortOrder
+    Value?: SortOrder
     VaultTypeId?: SortOrder
     DateOfValue?: SortOrder
     IsDeleted?: SortOrder
@@ -6361,6 +6382,7 @@ export namespace Prisma {
   export type VaultValuesMaxOrderByAggregateInput = {
     Id?: SortOrder
     Name?: SortOrder
+    Value?: SortOrder
     VaultTypeId?: SortOrder
     DateOfValue?: SortOrder
     IsDeleted?: SortOrder
@@ -6369,6 +6391,7 @@ export namespace Prisma {
   export type VaultValuesMinOrderByAggregateInput = {
     Id?: SortOrder
     Name?: SortOrder
+    Value?: SortOrder
     VaultTypeId?: SortOrder
     DateOfValue?: SortOrder
     IsDeleted?: SortOrder
@@ -6809,15 +6832,17 @@ export namespace Prisma {
 
   export type VaultValuesCreateWithoutTypeInput = {
     Name: string
+    Value: string
     DateOfValue: Date | string
-    IsDeleted: boolean
+    IsDeleted?: boolean
   }
 
   export type VaultValuesUncheckedCreateWithoutTypeInput = {
     Id?: number
     Name: string
+    Value: string
     DateOfValue: Date | string
-    IsDeleted: boolean
+    IsDeleted?: boolean
   }
 
   export type VaultValuesCreateOrConnectWithoutTypeInput = {
@@ -6847,6 +6872,7 @@ export namespace Prisma {
     NOT?: Enumerable<VaultValuesScalarWhereInput>
     Id?: IntFilter | number
     Name?: StringFilter | string
+    Value?: StringFilter | string
     VaultTypeId?: IntFilter | number
     DateOfValue?: DateTimeFilter | Date | string
     IsDeleted?: BoolFilter | boolean
@@ -6854,13 +6880,13 @@ export namespace Prisma {
 
   export type VaultTypeCreateWithoutValuesInput = {
     Name: string
-    IsDeleted: boolean
+    IsDeleted?: boolean
   }
 
   export type VaultTypeUncheckedCreateWithoutValuesInput = {
     Id?: number
     Name: string
-    IsDeleted: boolean
+    IsDeleted?: boolean
   }
 
   export type VaultTypeCreateOrConnectWithoutValuesInput = {
@@ -6887,14 +6913,14 @@ export namespace Prisma {
   export type JobParamsCreateWithoutJobInput = {
     Name: string
     Value: string
-    IsDeleted: boolean
+    IsDeleted?: boolean
   }
 
   export type JobParamsUncheckedCreateWithoutJobInput = {
     Id?: number
     Name: string
     Value: string
-    IsDeleted: boolean
+    IsDeleted?: boolean
   }
 
   export type JobParamsCreateOrConnectWithoutJobInput = {
@@ -6978,9 +7004,9 @@ export namespace Prisma {
     Name: string
     ExecuterClass: string
     ExecuteCronTime: string
-    IsDeleted: boolean
-    IsActive: boolean
-    IsRunningNow: boolean
+    IsDeleted?: boolean
+    IsActive?: boolean
+    IsRunningNow?: boolean
     Logs?: JobLogsCreateNestedManyWithoutJobInput
   }
 
@@ -6989,9 +7015,9 @@ export namespace Prisma {
     Name: string
     ExecuterClass: string
     ExecuteCronTime: string
-    IsDeleted: boolean
-    IsActive: boolean
-    IsRunningNow: boolean
+    IsDeleted?: boolean
+    IsActive?: boolean
+    IsRunningNow?: boolean
     Logs?: JobLogsUncheckedCreateNestedManyWithoutJobInput
   }
 
@@ -7030,9 +7056,9 @@ export namespace Prisma {
     Name: string
     ExecuterClass: string
     ExecuteCronTime: string
-    IsDeleted: boolean
-    IsActive: boolean
-    IsRunningNow: boolean
+    IsDeleted?: boolean
+    IsActive?: boolean
+    IsRunningNow?: boolean
     Params?: JobParamsCreateNestedManyWithoutJobInput
   }
 
@@ -7041,9 +7067,9 @@ export namespace Prisma {
     Name: string
     ExecuterClass: string
     ExecuteCronTime: string
-    IsDeleted: boolean
-    IsActive: boolean
-    IsRunningNow: boolean
+    IsDeleted?: boolean
+    IsActive?: boolean
+    IsRunningNow?: boolean
     Params?: JobParamsUncheckedCreateNestedManyWithoutJobInput
   }
 
@@ -7080,6 +7106,7 @@ export namespace Prisma {
 
   export type VaultValuesUpdateWithoutTypeInput = {
     Name?: StringFieldUpdateOperationsInput | string
+    Value?: StringFieldUpdateOperationsInput | string
     DateOfValue?: DateTimeFieldUpdateOperationsInput | Date | string
     IsDeleted?: BoolFieldUpdateOperationsInput | boolean
   }
@@ -7087,6 +7114,7 @@ export namespace Prisma {
   export type VaultValuesUncheckedUpdateWithoutTypeInput = {
     Id?: IntFieldUpdateOperationsInput | number
     Name?: StringFieldUpdateOperationsInput | string
+    Value?: StringFieldUpdateOperationsInput | string
     DateOfValue?: DateTimeFieldUpdateOperationsInput | Date | string
     IsDeleted?: BoolFieldUpdateOperationsInput | boolean
   }
@@ -7094,6 +7122,7 @@ export namespace Prisma {
   export type VaultValuesUncheckedUpdateManyWithoutValuesInput = {
     Id?: IntFieldUpdateOperationsInput | number
     Name?: StringFieldUpdateOperationsInput | string
+    Value?: StringFieldUpdateOperationsInput | string
     DateOfValue?: DateTimeFieldUpdateOperationsInput | Date | string
     IsDeleted?: BoolFieldUpdateOperationsInput | boolean
   }

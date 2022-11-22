@@ -1,4 +1,11 @@
-import { BistStaticValueGetter } from "./jobs/croker-jobs/BistStaticValueGetter";
+import { JobsRunner } from "./jobs/JobsRunner";
 
-let job = new BistStaticValueGetter("BIST Daily Values Getter")
-job.Start();
+
+async function App_Start(): Promise<void> {
+    let jobRunner = new JobsRunner();
+    await jobRunner.LoadAllJobs();
+
+}
+
+
+App_Start();
