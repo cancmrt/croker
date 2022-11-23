@@ -1,4 +1,5 @@
 import { JobsRunner } from "./jobs-base/JobsRunner";
+import { JobsInstaller } from './jobs-base/JobsInstaller';
 global.InitializedCrokerJobs = [];
 
 export class Loader {
@@ -29,8 +30,14 @@ export class Loader {
         };
         process.exit(0);
     }
+    private async Install(): Promise<void> {
+        let jobRunner = new JobsInstaller();
+        await jobRunner.InstallAllJobs();
+
+    }
     public async Start(): Promise<void> {
         let jobRunner = new JobsRunner();
+        await this.Install();
         await jobRunner.LoadAllJobs();
 
     }

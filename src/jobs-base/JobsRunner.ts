@@ -22,18 +22,13 @@ export class JobsRunner{
             }
         });
 
-        allJobs.forEach((job)=>{
-            import("../jobs/"+job.ExecuterClass+"/"+job.ExecuterClass)
-            .then(async jobClass => {
-                let createdClass = new jobClass[job.ExecuterClass](job.Name);
-                await createdClass.Start();
-                global.InitializedCrokerJobs.push(createdClass);
-            })
-            .catch(err => {
-                console.log(err);
-            });
-            
-        });
+        for await (const job of allJobs) {
+            let jobClass = await import("../jobs/"+job.ExecuterClass+"/"+job.ExecuterClass);
+            let createdClass = new jobClass[job.ExecuterClass]();
+            await createdClass.Start();
+            global.InitializedCrokerJobs.push(createdClass);
+        };
+
     }
 
 }

@@ -23,8 +23,8 @@ export class ZiraatFaizValueGetter extends CrokerJobs{
         }
         let $ = result.Document
 
-        let FindedFaiz =$('*[data-id="rdIntBranchVadeliTL"] table tbody').html();
-        let aa = FindedFaiz;
+        let MainTableForFaiz = $('*[data-id="rdIntBranchVadeliTL"] table tbody tr td:first-child').toArray()
+        let FaizValueIndex = MainTableForFaiz.findIndex(el => crawler.RemoveTagAndWhiteSpaces($(el).text()) == "30 - 31 gün arası");
 
     }
     public async Completed(BaseJob:CrokerJobs){

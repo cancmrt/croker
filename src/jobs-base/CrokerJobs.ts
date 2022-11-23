@@ -62,8 +62,9 @@ export abstract class CrokerJobs{
                 if(createdJob === undefined){
                     throw Error("Job database seviyesinde yaratılamadı...");
                 }
-                JobsLogger.Info(this.Name,"Job "+this.Name+" Version: "+this.Version+" pre-installation successfully");
+                await JobsLogger.Info(this.Name,"Job "+this.Name+" Version: "+this.Version+" pre-installation successfully");
                 await this.Install(createdJob);
+                await JobsLogger.Info(this.Name,"Job "+this.Name+" Version: "+this.Version+" installed greacfully");
             }
             catch(ex){
                 throw Error("Job yaratılırken bir sorun oluştu"+JSON.stringify(ex));
@@ -72,7 +73,7 @@ export abstract class CrokerJobs{
         }
         else{
             if(jobFinded.Version !== this.Version || jobFinded.ExecuterClass !== this.ExecuterClass){
-                JobsLogger.Info(this.Name,"Job "+this.Name+" old version detected");
+                await JobsLogger.Info(this.Name,"Job "+this.Name+" old version detected");
                 try{
                     await this.Install(jobFinded);
                     await this.Client?.$connect();
@@ -88,10 +89,10 @@ export abstract class CrokerJobs{
                         },
                     });
                     await this.Client?.$disconnect();
-                    JobsLogger.Info(this.Name,"Job "+this.Name+" new version installed greacfully");
+                    await JobsLogger.Info(this.Name,"Job "+this.Name+" new version installed greacfully");
                 }
                 catch(ex){
-                    JobsLogger.Error(this.Name,JSON.stringify(ex));
+                    await JobsLogger.Error(this.Name,JSON.stringify(ex));
                 }
 
             }

@@ -5,14 +5,11 @@ export class JobsLogger{
         
         let client = new PrismaClient
         await client.$connect();
-        let jobFinded =  await client.jobs.findFirstOrThrow({
+        let jobFinded = await client.jobs.findFirstOrThrow({
             where:{
                 OR:{
                     Name:{
                         equals: JobName
-                    },
-                    ExecuterClass:{
-                        equals:JobName
                     }
                 }
                 
@@ -43,9 +40,6 @@ export class JobsLogger{
                 OR:{
                     Name:{
                         equals: JobName
-                    },
-                    ExecuterClass:{
-                        equals:JobName
                     }
                 }
                 
@@ -76,9 +70,6 @@ export class JobsLogger{
                 OR:{
                     Name:{
                         equals: JobName
-                    },
-                    ExecuterClass:{
-                        equals:JobName
                     }
                 }
                 
