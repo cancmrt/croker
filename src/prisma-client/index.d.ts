@@ -44,6 +44,7 @@ export type Jobs = {
   Name: string
   ExecuterClass: string
   ExecuteCronTime: string
+  Version: string
   IsDeleted: boolean
   IsActive: boolean
   IsRunningNow: boolean
@@ -57,6 +58,19 @@ export type JobParams = {
   Id: number
   Name: string
   Value: string
+  IsDeleted: boolean
+  JobId: number
+}
+
+/**
+ * Model JobValues
+ * 
+ */
+export type JobValues = {
+  Id: number
+  Name: string
+  Value: string
+  DateOfValue: Date
   IsDeleted: boolean
   JobId: number
 }
@@ -254,6 +268,16 @@ export class PrismaClient<
     * ```
     */
   get jobParams(): Prisma.JobParamsDelegate<GlobalReject>;
+
+  /**
+   * `prisma.jobValues`: Exposes CRUD operations for the **JobValues** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more JobValues
+    * const jobValues = await prisma.jobValues.findMany()
+    * ```
+    */
+  get jobValues(): Prisma.JobValuesDelegate<GlobalReject>;
 
   /**
    * `prisma.jobLogs`: Exposes CRUD operations for the **JobLogs** model.
@@ -752,6 +776,7 @@ export namespace Prisma {
     VaultValues: 'VaultValues',
     Jobs: 'Jobs',
     JobParams: 'JobParams',
+    JobValues: 'JobValues',
     JobLogs: 'JobLogs'
   };
 
@@ -963,11 +988,13 @@ export namespace Prisma {
   export type JobsCountOutputType = {
     Params: number
     Logs: number
+    Values: number
   }
 
   export type JobsCountOutputTypeSelect = {
     Params?: boolean
     Logs?: boolean
+    Values?: boolean
   }
 
   export type JobsCountOutputTypeGetPayload<S extends boolean | null | undefined | JobsCountOutputTypeArgs, U = keyof S> =
@@ -2883,6 +2910,7 @@ export namespace Prisma {
     Name: string | null
     ExecuterClass: string | null
     ExecuteCronTime: string | null
+    Version: string | null
     IsDeleted: boolean | null
     IsActive: boolean | null
     IsRunningNow: boolean | null
@@ -2893,6 +2921,7 @@ export namespace Prisma {
     Name: string | null
     ExecuterClass: string | null
     ExecuteCronTime: string | null
+    Version: string | null
     IsDeleted: boolean | null
     IsActive: boolean | null
     IsRunningNow: boolean | null
@@ -2903,6 +2932,7 @@ export namespace Prisma {
     Name: number
     ExecuterClass: number
     ExecuteCronTime: number
+    Version: number
     IsDeleted: number
     IsActive: number
     IsRunningNow: number
@@ -2923,6 +2953,7 @@ export namespace Prisma {
     Name?: true
     ExecuterClass?: true
     ExecuteCronTime?: true
+    Version?: true
     IsDeleted?: true
     IsActive?: true
     IsRunningNow?: true
@@ -2933,6 +2964,7 @@ export namespace Prisma {
     Name?: true
     ExecuterClass?: true
     ExecuteCronTime?: true
+    Version?: true
     IsDeleted?: true
     IsActive?: true
     IsRunningNow?: true
@@ -2943,6 +2975,7 @@ export namespace Prisma {
     Name?: true
     ExecuterClass?: true
     ExecuteCronTime?: true
+    Version?: true
     IsDeleted?: true
     IsActive?: true
     IsRunningNow?: true
@@ -3046,6 +3079,7 @@ export namespace Prisma {
     Name: string
     ExecuterClass: string
     ExecuteCronTime: string
+    Version: string
     IsDeleted: boolean
     IsActive: boolean
     IsRunningNow: boolean
@@ -3075,11 +3109,13 @@ export namespace Prisma {
     Name?: boolean
     ExecuterClass?: boolean
     ExecuteCronTime?: boolean
+    Version?: boolean
     IsDeleted?: boolean
     IsActive?: boolean
     IsRunningNow?: boolean
     Params?: boolean | JobParamsFindManyArgs
     Logs?: boolean | JobLogsFindManyArgs
+    Values?: boolean | JobValuesFindManyArgs
     _count?: boolean | JobsCountOutputTypeArgs
   }
 
@@ -3087,6 +3123,7 @@ export namespace Prisma {
   export type JobsInclude = {
     Params?: boolean | JobParamsFindManyArgs
     Logs?: boolean | JobLogsFindManyArgs
+    Values?: boolean | JobValuesFindManyArgs
     _count?: boolean | JobsCountOutputTypeArgs
   } 
 
@@ -3099,6 +3136,7 @@ export namespace Prisma {
     [P in TrueKeys<S['include']>]:
         P extends 'Params' ? Array < JobParamsGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
         P extends 'Logs' ? Array < JobLogsGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
+        P extends 'Values' ? Array < JobValuesGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
         P extends '_count' ? JobsCountOutputTypeGetPayload<Exclude<S['include'], undefined | null>[P]> :  never
   } 
     : S extends { select: any } & (JobsArgs | JobsFindManyArgs)
@@ -3106,6 +3144,7 @@ export namespace Prisma {
     [P in TrueKeys<S['select']>]:
         P extends 'Params' ? Array < JobParamsGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
         P extends 'Logs' ? Array < JobLogsGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
+        P extends 'Values' ? Array < JobValuesGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
         P extends '_count' ? JobsCountOutputTypeGetPayload<Exclude<S['select'], undefined | null>[P]> :  P extends keyof Jobs ? Jobs[P] : never
   } 
       : Jobs
@@ -3467,6 +3506,8 @@ export namespace Prisma {
     Params<T extends JobParamsFindManyArgs= {}>(args?: Subset<T, JobParamsFindManyArgs>): PrismaPromise<Array<JobParamsGetPayload<T>>| Null>;
 
     Logs<T extends JobLogsFindManyArgs= {}>(args?: Subset<T, JobLogsFindManyArgs>): PrismaPromise<Array<JobLogsGetPayload<T>>| Null>;
+
+    Values<T extends JobValuesFindManyArgs= {}>(args?: Subset<T, JobValuesFindManyArgs>): PrismaPromise<Array<JobValuesGetPayload<T>>| Null>;
 
     private get _document();
     /**
@@ -4740,6 +4781,944 @@ export namespace Prisma {
 
 
   /**
+   * Model JobValues
+   */
+
+
+  export type AggregateJobValues = {
+    _count: JobValuesCountAggregateOutputType | null
+    _avg: JobValuesAvgAggregateOutputType | null
+    _sum: JobValuesSumAggregateOutputType | null
+    _min: JobValuesMinAggregateOutputType | null
+    _max: JobValuesMaxAggregateOutputType | null
+  }
+
+  export type JobValuesAvgAggregateOutputType = {
+    Id: number | null
+    JobId: number | null
+  }
+
+  export type JobValuesSumAggregateOutputType = {
+    Id: number | null
+    JobId: number | null
+  }
+
+  export type JobValuesMinAggregateOutputType = {
+    Id: number | null
+    Name: string | null
+    Value: string | null
+    DateOfValue: Date | null
+    IsDeleted: boolean | null
+    JobId: number | null
+  }
+
+  export type JobValuesMaxAggregateOutputType = {
+    Id: number | null
+    Name: string | null
+    Value: string | null
+    DateOfValue: Date | null
+    IsDeleted: boolean | null
+    JobId: number | null
+  }
+
+  export type JobValuesCountAggregateOutputType = {
+    Id: number
+    Name: number
+    Value: number
+    DateOfValue: number
+    IsDeleted: number
+    JobId: number
+    _all: number
+  }
+
+
+  export type JobValuesAvgAggregateInputType = {
+    Id?: true
+    JobId?: true
+  }
+
+  export type JobValuesSumAggregateInputType = {
+    Id?: true
+    JobId?: true
+  }
+
+  export type JobValuesMinAggregateInputType = {
+    Id?: true
+    Name?: true
+    Value?: true
+    DateOfValue?: true
+    IsDeleted?: true
+    JobId?: true
+  }
+
+  export type JobValuesMaxAggregateInputType = {
+    Id?: true
+    Name?: true
+    Value?: true
+    DateOfValue?: true
+    IsDeleted?: true
+    JobId?: true
+  }
+
+  export type JobValuesCountAggregateInputType = {
+    Id?: true
+    Name?: true
+    Value?: true
+    DateOfValue?: true
+    IsDeleted?: true
+    JobId?: true
+    _all?: true
+  }
+
+  export type JobValuesAggregateArgs = {
+    /**
+     * Filter which JobValues to aggregate.
+     * 
+    **/
+    where?: JobValuesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of JobValues to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<JobValuesOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     * 
+    **/
+    cursor?: JobValuesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` JobValues from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` JobValues.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned JobValues
+    **/
+    _count?: true | JobValuesCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: JobValuesAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: JobValuesSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: JobValuesMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: JobValuesMaxAggregateInputType
+  }
+
+  export type GetJobValuesAggregateType<T extends JobValuesAggregateArgs> = {
+        [P in keyof T & keyof AggregateJobValues]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateJobValues[P]>
+      : GetScalarType<T[P], AggregateJobValues[P]>
+  }
+
+
+
+
+  export type JobValuesGroupByArgs = {
+    where?: JobValuesWhereInput
+    orderBy?: Enumerable<JobValuesOrderByWithAggregationInput>
+    by: Array<JobValuesScalarFieldEnum>
+    having?: JobValuesScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: JobValuesCountAggregateInputType | true
+    _avg?: JobValuesAvgAggregateInputType
+    _sum?: JobValuesSumAggregateInputType
+    _min?: JobValuesMinAggregateInputType
+    _max?: JobValuesMaxAggregateInputType
+  }
+
+
+  export type JobValuesGroupByOutputType = {
+    Id: number
+    Name: string
+    Value: string
+    DateOfValue: Date
+    IsDeleted: boolean
+    JobId: number
+    _count: JobValuesCountAggregateOutputType | null
+    _avg: JobValuesAvgAggregateOutputType | null
+    _sum: JobValuesSumAggregateOutputType | null
+    _min: JobValuesMinAggregateOutputType | null
+    _max: JobValuesMaxAggregateOutputType | null
+  }
+
+  type GetJobValuesGroupByPayload<T extends JobValuesGroupByArgs> = PrismaPromise<
+    Array<
+      PickArray<JobValuesGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof JobValuesGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], JobValuesGroupByOutputType[P]>
+            : GetScalarType<T[P], JobValuesGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type JobValuesSelect = {
+    Id?: boolean
+    Name?: boolean
+    Value?: boolean
+    DateOfValue?: boolean
+    IsDeleted?: boolean
+    Job?: boolean | JobsArgs
+    JobId?: boolean
+  }
+
+
+  export type JobValuesInclude = {
+    Job?: boolean | JobsArgs
+  } 
+
+  export type JobValuesGetPayload<S extends boolean | null | undefined | JobValuesArgs, U = keyof S> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? JobValues :
+    S extends undefined ? never :
+    S extends { include: any } & (JobValuesArgs | JobValuesFindManyArgs)
+    ? JobValues  & {
+    [P in TrueKeys<S['include']>]:
+        P extends 'Job' ? JobsGetPayload<Exclude<S['include'], undefined | null>[P]> :  never
+  } 
+    : S extends { select: any } & (JobValuesArgs | JobValuesFindManyArgs)
+      ? {
+    [P in TrueKeys<S['select']>]:
+        P extends 'Job' ? JobsGetPayload<Exclude<S['select'], undefined | null>[P]> :  P extends keyof JobValues ? JobValues[P] : never
+  } 
+      : JobValues
+
+
+  type JobValuesCountArgs = Merge<
+    Omit<JobValuesFindManyArgs, 'select' | 'include'> & {
+      select?: JobValuesCountAggregateInputType | true
+    }
+  >
+
+  export interface JobValuesDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+    /**
+     * Find zero or one JobValues that matches the filter.
+     * @param {JobValuesFindUniqueArgs} args - Arguments to find a JobValues
+     * @example
+     * // Get one JobValues
+     * const jobValues = await prisma.jobValues.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends JobValuesFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, JobValuesFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'JobValues'> extends True ? Prisma__JobValuesClient<JobValuesGetPayload<T>> : Prisma__JobValuesClient<JobValuesGetPayload<T> | null, null>
+
+    /**
+     * Find the first JobValues that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {JobValuesFindFirstArgs} args - Arguments to find a JobValues
+     * @example
+     * // Get one JobValues
+     * const jobValues = await prisma.jobValues.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends JobValuesFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, JobValuesFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'JobValues'> extends True ? Prisma__JobValuesClient<JobValuesGetPayload<T>> : Prisma__JobValuesClient<JobValuesGetPayload<T> | null, null>
+
+    /**
+     * Find zero or more JobValues that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {JobValuesFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all JobValues
+     * const jobValues = await prisma.jobValues.findMany()
+     * 
+     * // Get first 10 JobValues
+     * const jobValues = await prisma.jobValues.findMany({ take: 10 })
+     * 
+     * // Only select the `Id`
+     * const jobValuesWithIdOnly = await prisma.jobValues.findMany({ select: { Id: true } })
+     * 
+    **/
+    findMany<T extends JobValuesFindManyArgs>(
+      args?: SelectSubset<T, JobValuesFindManyArgs>
+    ): PrismaPromise<Array<JobValuesGetPayload<T>>>
+
+    /**
+     * Create a JobValues.
+     * @param {JobValuesCreateArgs} args - Arguments to create a JobValues.
+     * @example
+     * // Create one JobValues
+     * const JobValues = await prisma.jobValues.create({
+     *   data: {
+     *     // ... data to create a JobValues
+     *   }
+     * })
+     * 
+    **/
+    create<T extends JobValuesCreateArgs>(
+      args: SelectSubset<T, JobValuesCreateArgs>
+    ): Prisma__JobValuesClient<JobValuesGetPayload<T>>
+
+    /**
+     * Delete a JobValues.
+     * @param {JobValuesDeleteArgs} args - Arguments to delete one JobValues.
+     * @example
+     * // Delete one JobValues
+     * const JobValues = await prisma.jobValues.delete({
+     *   where: {
+     *     // ... filter to delete one JobValues
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends JobValuesDeleteArgs>(
+      args: SelectSubset<T, JobValuesDeleteArgs>
+    ): Prisma__JobValuesClient<JobValuesGetPayload<T>>
+
+    /**
+     * Update one JobValues.
+     * @param {JobValuesUpdateArgs} args - Arguments to update one JobValues.
+     * @example
+     * // Update one JobValues
+     * const jobValues = await prisma.jobValues.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends JobValuesUpdateArgs>(
+      args: SelectSubset<T, JobValuesUpdateArgs>
+    ): Prisma__JobValuesClient<JobValuesGetPayload<T>>
+
+    /**
+     * Delete zero or more JobValues.
+     * @param {JobValuesDeleteManyArgs} args - Arguments to filter JobValues to delete.
+     * @example
+     * // Delete a few JobValues
+     * const { count } = await prisma.jobValues.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends JobValuesDeleteManyArgs>(
+      args?: SelectSubset<T, JobValuesDeleteManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more JobValues.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {JobValuesUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many JobValues
+     * const jobValues = await prisma.jobValues.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends JobValuesUpdateManyArgs>(
+      args: SelectSubset<T, JobValuesUpdateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one JobValues.
+     * @param {JobValuesUpsertArgs} args - Arguments to update or create a JobValues.
+     * @example
+     * // Update or create a JobValues
+     * const jobValues = await prisma.jobValues.upsert({
+     *   create: {
+     *     // ... data to create a JobValues
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the JobValues we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends JobValuesUpsertArgs>(
+      args: SelectSubset<T, JobValuesUpsertArgs>
+    ): Prisma__JobValuesClient<JobValuesGetPayload<T>>
+
+    /**
+     * Find one JobValues that matches the filter or throw
+     * `NotFoundError` if no matches were found.
+     * @param {JobValuesFindUniqueOrThrowArgs} args - Arguments to find a JobValues
+     * @example
+     * // Get one JobValues
+     * const jobValues = await prisma.jobValues.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends JobValuesFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, JobValuesFindUniqueOrThrowArgs>
+    ): Prisma__JobValuesClient<JobValuesGetPayload<T>>
+
+    /**
+     * Find the first JobValues that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {JobValuesFindFirstOrThrowArgs} args - Arguments to find a JobValues
+     * @example
+     * // Get one JobValues
+     * const jobValues = await prisma.jobValues.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends JobValuesFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, JobValuesFindFirstOrThrowArgs>
+    ): Prisma__JobValuesClient<JobValuesGetPayload<T>>
+
+    /**
+     * Count the number of JobValues.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {JobValuesCountArgs} args - Arguments to filter JobValues to count.
+     * @example
+     * // Count the number of JobValues
+     * const count = await prisma.jobValues.count({
+     *   where: {
+     *     // ... the filter for the JobValues we want to count
+     *   }
+     * })
+    **/
+    count<T extends JobValuesCountArgs>(
+      args?: Subset<T, JobValuesCountArgs>,
+    ): PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], JobValuesCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a JobValues.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {JobValuesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends JobValuesAggregateArgs>(args: Subset<T, JobValuesAggregateArgs>): PrismaPromise<GetJobValuesAggregateType<T>>
+
+    /**
+     * Group by JobValues.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {JobValuesGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends JobValuesGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: JobValuesGroupByArgs['orderBy'] }
+        : { orderBy?: JobValuesGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, JobValuesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetJobValuesGroupByPayload<T> : PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for JobValues.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__JobValuesClient<T, Null = never> implements PrismaPromise<T> {
+    [prisma]: true;
+    private readonly _dmmf;
+    private readonly _fetcher;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+    readonly [Symbol.toStringTag]: 'PrismaClientPromise';
+
+    Job<T extends JobsArgs= {}>(args?: Subset<T, JobsArgs>): Prisma__JobsClient<JobsGetPayload<T> | Null>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * JobValues base type for findUnique actions
+   */
+  export type JobValuesFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the JobValues
+     * 
+    **/
+    select?: JobValuesSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: JobValuesInclude | null
+    /**
+     * Filter, which JobValues to fetch.
+     * 
+    **/
+    where: JobValuesWhereUniqueInput
+  }
+
+  /**
+   * JobValues: findUnique
+   */
+  export interface JobValuesFindUniqueArgs extends JobValuesFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * JobValues base type for findFirst actions
+   */
+  export type JobValuesFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the JobValues
+     * 
+    **/
+    select?: JobValuesSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: JobValuesInclude | null
+    /**
+     * Filter, which JobValues to fetch.
+     * 
+    **/
+    where?: JobValuesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of JobValues to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<JobValuesOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for JobValues.
+     * 
+    **/
+    cursor?: JobValuesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` JobValues from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` JobValues.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of JobValues.
+     * 
+    **/
+    distinct?: Enumerable<JobValuesScalarFieldEnum>
+  }
+
+  /**
+   * JobValues: findFirst
+   */
+  export interface JobValuesFindFirstArgs extends JobValuesFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * JobValues findMany
+   */
+  export type JobValuesFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the JobValues
+     * 
+    **/
+    select?: JobValuesSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: JobValuesInclude | null
+    /**
+     * Filter, which JobValues to fetch.
+     * 
+    **/
+    where?: JobValuesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of JobValues to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<JobValuesOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing JobValues.
+     * 
+    **/
+    cursor?: JobValuesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` JobValues from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` JobValues.
+     * 
+    **/
+    skip?: number
+    distinct?: Enumerable<JobValuesScalarFieldEnum>
+  }
+
+
+  /**
+   * JobValues create
+   */
+  export type JobValuesCreateArgs = {
+    /**
+     * Select specific fields to fetch from the JobValues
+     * 
+    **/
+    select?: JobValuesSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: JobValuesInclude | null
+    /**
+     * The data needed to create a JobValues.
+     * 
+    **/
+    data: XOR<JobValuesCreateInput, JobValuesUncheckedCreateInput>
+  }
+
+
+  /**
+   * JobValues update
+   */
+  export type JobValuesUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the JobValues
+     * 
+    **/
+    select?: JobValuesSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: JobValuesInclude | null
+    /**
+     * The data needed to update a JobValues.
+     * 
+    **/
+    data: XOR<JobValuesUpdateInput, JobValuesUncheckedUpdateInput>
+    /**
+     * Choose, which JobValues to update.
+     * 
+    **/
+    where: JobValuesWhereUniqueInput
+  }
+
+
+  /**
+   * JobValues updateMany
+   */
+  export type JobValuesUpdateManyArgs = {
+    /**
+     * The data used to update JobValues.
+     * 
+    **/
+    data: XOR<JobValuesUpdateManyMutationInput, JobValuesUncheckedUpdateManyInput>
+    /**
+     * Filter which JobValues to update
+     * 
+    **/
+    where?: JobValuesWhereInput
+  }
+
+
+  /**
+   * JobValues upsert
+   */
+  export type JobValuesUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the JobValues
+     * 
+    **/
+    select?: JobValuesSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: JobValuesInclude | null
+    /**
+     * The filter to search for the JobValues to update in case it exists.
+     * 
+    **/
+    where: JobValuesWhereUniqueInput
+    /**
+     * In case the JobValues found by the `where` argument doesn't exist, create a new JobValues with this data.
+     * 
+    **/
+    create: XOR<JobValuesCreateInput, JobValuesUncheckedCreateInput>
+    /**
+     * In case the JobValues was found with the provided `where` argument, update it with this data.
+     * 
+    **/
+    update: XOR<JobValuesUpdateInput, JobValuesUncheckedUpdateInput>
+  }
+
+
+  /**
+   * JobValues delete
+   */
+  export type JobValuesDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the JobValues
+     * 
+    **/
+    select?: JobValuesSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: JobValuesInclude | null
+    /**
+     * Filter which JobValues to delete.
+     * 
+    **/
+    where: JobValuesWhereUniqueInput
+  }
+
+
+  /**
+   * JobValues deleteMany
+   */
+  export type JobValuesDeleteManyArgs = {
+    /**
+     * Filter which JobValues to delete
+     * 
+    **/
+    where?: JobValuesWhereInput
+  }
+
+
+  /**
+   * JobValues: findUniqueOrThrow
+   */
+  export type JobValuesFindUniqueOrThrowArgs = JobValuesFindUniqueArgsBase
+      
+
+  /**
+   * JobValues: findFirstOrThrow
+   */
+  export type JobValuesFindFirstOrThrowArgs = JobValuesFindFirstArgsBase
+      
+
+  /**
+   * JobValues without action
+   */
+  export type JobValuesArgs = {
+    /**
+     * Select specific fields to fetch from the JobValues
+     * 
+    **/
+    select?: JobValuesSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: JobValuesInclude | null
+  }
+
+
+
+  /**
    * Model JobLogs
    */
 
@@ -5707,11 +6686,24 @@ export namespace Prisma {
   export type JobParamsScalarFieldEnum = (typeof JobParamsScalarFieldEnum)[keyof typeof JobParamsScalarFieldEnum]
 
 
+  export const JobValuesScalarFieldEnum: {
+    Id: 'Id',
+    Name: 'Name',
+    Value: 'Value',
+    DateOfValue: 'DateOfValue',
+    IsDeleted: 'IsDeleted',
+    JobId: 'JobId'
+  };
+
+  export type JobValuesScalarFieldEnum = (typeof JobValuesScalarFieldEnum)[keyof typeof JobValuesScalarFieldEnum]
+
+
   export const JobsScalarFieldEnum: {
     Id: 'Id',
     Name: 'Name',
     ExecuterClass: 'ExecuterClass',
     ExecuteCronTime: 'ExecuteCronTime',
+    Version: 'Version',
     IsDeleted: 'IsDeleted',
     IsActive: 'IsActive',
     IsRunningNow: 'IsRunningNow'
@@ -5863,11 +6855,13 @@ export namespace Prisma {
     Name?: StringFilter | string
     ExecuterClass?: StringFilter | string
     ExecuteCronTime?: StringFilter | string
+    Version?: StringFilter | string
     IsDeleted?: BoolFilter | boolean
     IsActive?: BoolFilter | boolean
     IsRunningNow?: BoolFilter | boolean
     Params?: JobParamsListRelationFilter
     Logs?: JobLogsListRelationFilter
+    Values?: JobValuesListRelationFilter
   }
 
   export type JobsOrderByWithRelationInput = {
@@ -5875,11 +6869,13 @@ export namespace Prisma {
     Name?: SortOrder
     ExecuterClass?: SortOrder
     ExecuteCronTime?: SortOrder
+    Version?: SortOrder
     IsDeleted?: SortOrder
     IsActive?: SortOrder
     IsRunningNow?: SortOrder
     Params?: JobParamsOrderByRelationAggregateInput
     Logs?: JobLogsOrderByRelationAggregateInput
+    Values?: JobValuesOrderByRelationAggregateInput
   }
 
   export type JobsWhereUniqueInput = {
@@ -5891,6 +6887,7 @@ export namespace Prisma {
     Name?: SortOrder
     ExecuterClass?: SortOrder
     ExecuteCronTime?: SortOrder
+    Version?: SortOrder
     IsDeleted?: SortOrder
     IsActive?: SortOrder
     IsRunningNow?: SortOrder
@@ -5909,6 +6906,7 @@ export namespace Prisma {
     Name?: StringWithAggregatesFilter | string
     ExecuterClass?: StringWithAggregatesFilter | string
     ExecuteCronTime?: StringWithAggregatesFilter | string
+    Version?: StringWithAggregatesFilter | string
     IsDeleted?: BoolWithAggregatesFilter | boolean
     IsActive?: BoolWithAggregatesFilter | boolean
     IsRunningNow?: BoolWithAggregatesFilter | boolean
@@ -5959,6 +6957,59 @@ export namespace Prisma {
     Id?: IntWithAggregatesFilter | number
     Name?: StringWithAggregatesFilter | string
     Value?: StringWithAggregatesFilter | string
+    IsDeleted?: BoolWithAggregatesFilter | boolean
+    JobId?: IntWithAggregatesFilter | number
+  }
+
+  export type JobValuesWhereInput = {
+    AND?: Enumerable<JobValuesWhereInput>
+    OR?: Enumerable<JobValuesWhereInput>
+    NOT?: Enumerable<JobValuesWhereInput>
+    Id?: IntFilter | number
+    Name?: StringFilter | string
+    Value?: StringFilter | string
+    DateOfValue?: DateTimeFilter | Date | string
+    IsDeleted?: BoolFilter | boolean
+    Job?: XOR<JobsRelationFilter, JobsWhereInput>
+    JobId?: IntFilter | number
+  }
+
+  export type JobValuesOrderByWithRelationInput = {
+    Id?: SortOrder
+    Name?: SortOrder
+    Value?: SortOrder
+    DateOfValue?: SortOrder
+    IsDeleted?: SortOrder
+    Job?: JobsOrderByWithRelationInput
+    JobId?: SortOrder
+  }
+
+  export type JobValuesWhereUniqueInput = {
+    Id?: number
+  }
+
+  export type JobValuesOrderByWithAggregationInput = {
+    Id?: SortOrder
+    Name?: SortOrder
+    Value?: SortOrder
+    DateOfValue?: SortOrder
+    IsDeleted?: SortOrder
+    JobId?: SortOrder
+    _count?: JobValuesCountOrderByAggregateInput
+    _avg?: JobValuesAvgOrderByAggregateInput
+    _max?: JobValuesMaxOrderByAggregateInput
+    _min?: JobValuesMinOrderByAggregateInput
+    _sum?: JobValuesSumOrderByAggregateInput
+  }
+
+  export type JobValuesScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<JobValuesScalarWhereWithAggregatesInput>
+    OR?: Enumerable<JobValuesScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<JobValuesScalarWhereWithAggregatesInput>
+    Id?: IntWithAggregatesFilter | number
+    Name?: StringWithAggregatesFilter | string
+    Value?: StringWithAggregatesFilter | string
+    DateOfValue?: DateTimeWithAggregatesFilter | Date | string
     IsDeleted?: BoolWithAggregatesFilter | boolean
     JobId?: IntWithAggregatesFilter | number
   }
@@ -6107,11 +7158,13 @@ export namespace Prisma {
     Name: string
     ExecuterClass: string
     ExecuteCronTime: string
+    Version?: string
     IsDeleted?: boolean
     IsActive?: boolean
     IsRunningNow?: boolean
     Params?: JobParamsCreateNestedManyWithoutJobInput
     Logs?: JobLogsCreateNestedManyWithoutJobInput
+    Values?: JobValuesCreateNestedManyWithoutJobInput
   }
 
   export type JobsUncheckedCreateInput = {
@@ -6119,22 +7172,26 @@ export namespace Prisma {
     Name: string
     ExecuterClass: string
     ExecuteCronTime: string
+    Version?: string
     IsDeleted?: boolean
     IsActive?: boolean
     IsRunningNow?: boolean
     Params?: JobParamsUncheckedCreateNestedManyWithoutJobInput
     Logs?: JobLogsUncheckedCreateNestedManyWithoutJobInput
+    Values?: JobValuesUncheckedCreateNestedManyWithoutJobInput
   }
 
   export type JobsUpdateInput = {
     Name?: StringFieldUpdateOperationsInput | string
     ExecuterClass?: StringFieldUpdateOperationsInput | string
     ExecuteCronTime?: StringFieldUpdateOperationsInput | string
+    Version?: StringFieldUpdateOperationsInput | string
     IsDeleted?: BoolFieldUpdateOperationsInput | boolean
     IsActive?: BoolFieldUpdateOperationsInput | boolean
     IsRunningNow?: BoolFieldUpdateOperationsInput | boolean
     Params?: JobParamsUpdateManyWithoutJobNestedInput
     Logs?: JobLogsUpdateManyWithoutJobNestedInput
+    Values?: JobValuesUpdateManyWithoutJobNestedInput
   }
 
   export type JobsUncheckedUpdateInput = {
@@ -6142,17 +7199,20 @@ export namespace Prisma {
     Name?: StringFieldUpdateOperationsInput | string
     ExecuterClass?: StringFieldUpdateOperationsInput | string
     ExecuteCronTime?: StringFieldUpdateOperationsInput | string
+    Version?: StringFieldUpdateOperationsInput | string
     IsDeleted?: BoolFieldUpdateOperationsInput | boolean
     IsActive?: BoolFieldUpdateOperationsInput | boolean
     IsRunningNow?: BoolFieldUpdateOperationsInput | boolean
     Params?: JobParamsUncheckedUpdateManyWithoutJobNestedInput
     Logs?: JobLogsUncheckedUpdateManyWithoutJobNestedInput
+    Values?: JobValuesUncheckedUpdateManyWithoutJobNestedInput
   }
 
   export type JobsUpdateManyMutationInput = {
     Name?: StringFieldUpdateOperationsInput | string
     ExecuterClass?: StringFieldUpdateOperationsInput | string
     ExecuteCronTime?: StringFieldUpdateOperationsInput | string
+    Version?: StringFieldUpdateOperationsInput | string
     IsDeleted?: BoolFieldUpdateOperationsInput | boolean
     IsActive?: BoolFieldUpdateOperationsInput | boolean
     IsRunningNow?: BoolFieldUpdateOperationsInput | boolean
@@ -6163,6 +7223,7 @@ export namespace Prisma {
     Name?: StringFieldUpdateOperationsInput | string
     ExecuterClass?: StringFieldUpdateOperationsInput | string
     ExecuteCronTime?: StringFieldUpdateOperationsInput | string
+    Version?: StringFieldUpdateOperationsInput | string
     IsDeleted?: BoolFieldUpdateOperationsInput | boolean
     IsActive?: BoolFieldUpdateOperationsInput | boolean
     IsRunningNow?: BoolFieldUpdateOperationsInput | boolean
@@ -6208,6 +7269,56 @@ export namespace Prisma {
     Id?: IntFieldUpdateOperationsInput | number
     Name?: StringFieldUpdateOperationsInput | string
     Value?: StringFieldUpdateOperationsInput | string
+    IsDeleted?: BoolFieldUpdateOperationsInput | boolean
+    JobId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type JobValuesCreateInput = {
+    Name: string
+    Value: string
+    DateOfValue: Date | string
+    IsDeleted?: boolean
+    Job: JobsCreateNestedOneWithoutValuesInput
+  }
+
+  export type JobValuesUncheckedCreateInput = {
+    Id?: number
+    Name: string
+    Value: string
+    DateOfValue: Date | string
+    IsDeleted?: boolean
+    JobId: number
+  }
+
+  export type JobValuesUpdateInput = {
+    Name?: StringFieldUpdateOperationsInput | string
+    Value?: StringFieldUpdateOperationsInput | string
+    DateOfValue?: DateTimeFieldUpdateOperationsInput | Date | string
+    IsDeleted?: BoolFieldUpdateOperationsInput | boolean
+    Job?: JobsUpdateOneRequiredWithoutValuesNestedInput
+  }
+
+  export type JobValuesUncheckedUpdateInput = {
+    Id?: IntFieldUpdateOperationsInput | number
+    Name?: StringFieldUpdateOperationsInput | string
+    Value?: StringFieldUpdateOperationsInput | string
+    DateOfValue?: DateTimeFieldUpdateOperationsInput | Date | string
+    IsDeleted?: BoolFieldUpdateOperationsInput | boolean
+    JobId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type JobValuesUpdateManyMutationInput = {
+    Name?: StringFieldUpdateOperationsInput | string
+    Value?: StringFieldUpdateOperationsInput | string
+    DateOfValue?: DateTimeFieldUpdateOperationsInput | Date | string
+    IsDeleted?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type JobValuesUncheckedUpdateManyInput = {
+    Id?: IntFieldUpdateOperationsInput | number
+    Name?: StringFieldUpdateOperationsInput | string
+    Value?: StringFieldUpdateOperationsInput | string
+    DateOfValue?: DateTimeFieldUpdateOperationsInput | Date | string
     IsDeleted?: BoolFieldUpdateOperationsInput | boolean
     JobId?: IntFieldUpdateOperationsInput | number
   }
@@ -6448,6 +7559,12 @@ export namespace Prisma {
     none?: JobLogsWhereInput
   }
 
+  export type JobValuesListRelationFilter = {
+    every?: JobValuesWhereInput
+    some?: JobValuesWhereInput
+    none?: JobValuesWhereInput
+  }
+
   export type JobParamsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -6456,11 +7573,16 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type JobValuesOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type JobsCountOrderByAggregateInput = {
     Id?: SortOrder
     Name?: SortOrder
     ExecuterClass?: SortOrder
     ExecuteCronTime?: SortOrder
+    Version?: SortOrder
     IsDeleted?: SortOrder
     IsActive?: SortOrder
     IsRunningNow?: SortOrder
@@ -6475,6 +7597,7 @@ export namespace Prisma {
     Name?: SortOrder
     ExecuterClass?: SortOrder
     ExecuteCronTime?: SortOrder
+    Version?: SortOrder
     IsDeleted?: SortOrder
     IsActive?: SortOrder
     IsRunningNow?: SortOrder
@@ -6485,6 +7608,7 @@ export namespace Prisma {
     Name?: SortOrder
     ExecuterClass?: SortOrder
     ExecuteCronTime?: SortOrder
+    Version?: SortOrder
     IsDeleted?: SortOrder
     IsActive?: SortOrder
     IsRunningNow?: SortOrder
@@ -6529,6 +7653,43 @@ export namespace Prisma {
   }
 
   export type JobParamsSumOrderByAggregateInput = {
+    Id?: SortOrder
+    JobId?: SortOrder
+  }
+
+  export type JobValuesCountOrderByAggregateInput = {
+    Id?: SortOrder
+    Name?: SortOrder
+    Value?: SortOrder
+    DateOfValue?: SortOrder
+    IsDeleted?: SortOrder
+    JobId?: SortOrder
+  }
+
+  export type JobValuesAvgOrderByAggregateInput = {
+    Id?: SortOrder
+    JobId?: SortOrder
+  }
+
+  export type JobValuesMaxOrderByAggregateInput = {
+    Id?: SortOrder
+    Name?: SortOrder
+    Value?: SortOrder
+    DateOfValue?: SortOrder
+    IsDeleted?: SortOrder
+    JobId?: SortOrder
+  }
+
+  export type JobValuesMinOrderByAggregateInput = {
+    Id?: SortOrder
+    Name?: SortOrder
+    Value?: SortOrder
+    DateOfValue?: SortOrder
+    IsDeleted?: SortOrder
+    JobId?: SortOrder
+  }
+
+  export type JobValuesSumOrderByAggregateInput = {
     Id?: SortOrder
     JobId?: SortOrder
   }
@@ -6654,6 +7815,12 @@ export namespace Prisma {
     connect?: Enumerable<JobLogsWhereUniqueInput>
   }
 
+  export type JobValuesCreateNestedManyWithoutJobInput = {
+    create?: XOR<Enumerable<JobValuesCreateWithoutJobInput>, Enumerable<JobValuesUncheckedCreateWithoutJobInput>>
+    connectOrCreate?: Enumerable<JobValuesCreateOrConnectWithoutJobInput>
+    connect?: Enumerable<JobValuesWhereUniqueInput>
+  }
+
   export type JobParamsUncheckedCreateNestedManyWithoutJobInput = {
     create?: XOR<Enumerable<JobParamsCreateWithoutJobInput>, Enumerable<JobParamsUncheckedCreateWithoutJobInput>>
     connectOrCreate?: Enumerable<JobParamsCreateOrConnectWithoutJobInput>
@@ -6664,6 +7831,12 @@ export namespace Prisma {
     create?: XOR<Enumerable<JobLogsCreateWithoutJobInput>, Enumerable<JobLogsUncheckedCreateWithoutJobInput>>
     connectOrCreate?: Enumerable<JobLogsCreateOrConnectWithoutJobInput>
     connect?: Enumerable<JobLogsWhereUniqueInput>
+  }
+
+  export type JobValuesUncheckedCreateNestedManyWithoutJobInput = {
+    create?: XOR<Enumerable<JobValuesCreateWithoutJobInput>, Enumerable<JobValuesUncheckedCreateWithoutJobInput>>
+    connectOrCreate?: Enumerable<JobValuesCreateOrConnectWithoutJobInput>
+    connect?: Enumerable<JobValuesWhereUniqueInput>
   }
 
   export type JobParamsUpdateManyWithoutJobNestedInput = {
@@ -6692,6 +7865,19 @@ export namespace Prisma {
     deleteMany?: Enumerable<JobLogsScalarWhereInput>
   }
 
+  export type JobValuesUpdateManyWithoutJobNestedInput = {
+    create?: XOR<Enumerable<JobValuesCreateWithoutJobInput>, Enumerable<JobValuesUncheckedCreateWithoutJobInput>>
+    connectOrCreate?: Enumerable<JobValuesCreateOrConnectWithoutJobInput>
+    upsert?: Enumerable<JobValuesUpsertWithWhereUniqueWithoutJobInput>
+    set?: Enumerable<JobValuesWhereUniqueInput>
+    disconnect?: Enumerable<JobValuesWhereUniqueInput>
+    delete?: Enumerable<JobValuesWhereUniqueInput>
+    connect?: Enumerable<JobValuesWhereUniqueInput>
+    update?: Enumerable<JobValuesUpdateWithWhereUniqueWithoutJobInput>
+    updateMany?: Enumerable<JobValuesUpdateManyWithWhereWithoutJobInput>
+    deleteMany?: Enumerable<JobValuesScalarWhereInput>
+  }
+
   export type JobParamsUncheckedUpdateManyWithoutJobNestedInput = {
     create?: XOR<Enumerable<JobParamsCreateWithoutJobInput>, Enumerable<JobParamsUncheckedCreateWithoutJobInput>>
     connectOrCreate?: Enumerable<JobParamsCreateOrConnectWithoutJobInput>
@@ -6718,6 +7904,19 @@ export namespace Prisma {
     deleteMany?: Enumerable<JobLogsScalarWhereInput>
   }
 
+  export type JobValuesUncheckedUpdateManyWithoutJobNestedInput = {
+    create?: XOR<Enumerable<JobValuesCreateWithoutJobInput>, Enumerable<JobValuesUncheckedCreateWithoutJobInput>>
+    connectOrCreate?: Enumerable<JobValuesCreateOrConnectWithoutJobInput>
+    upsert?: Enumerable<JobValuesUpsertWithWhereUniqueWithoutJobInput>
+    set?: Enumerable<JobValuesWhereUniqueInput>
+    disconnect?: Enumerable<JobValuesWhereUniqueInput>
+    delete?: Enumerable<JobValuesWhereUniqueInput>
+    connect?: Enumerable<JobValuesWhereUniqueInput>
+    update?: Enumerable<JobValuesUpdateWithWhereUniqueWithoutJobInput>
+    updateMany?: Enumerable<JobValuesUpdateManyWithWhereWithoutJobInput>
+    deleteMany?: Enumerable<JobValuesScalarWhereInput>
+  }
+
   export type JobsCreateNestedOneWithoutParamsInput = {
     create?: XOR<JobsCreateWithoutParamsInput, JobsUncheckedCreateWithoutParamsInput>
     connectOrCreate?: JobsCreateOrConnectWithoutParamsInput
@@ -6730,6 +7929,20 @@ export namespace Prisma {
     upsert?: JobsUpsertWithoutParamsInput
     connect?: JobsWhereUniqueInput
     update?: XOR<JobsUpdateWithoutParamsInput, JobsUncheckedUpdateWithoutParamsInput>
+  }
+
+  export type JobsCreateNestedOneWithoutValuesInput = {
+    create?: XOR<JobsCreateWithoutValuesInput, JobsUncheckedCreateWithoutValuesInput>
+    connectOrCreate?: JobsCreateOrConnectWithoutValuesInput
+    connect?: JobsWhereUniqueInput
+  }
+
+  export type JobsUpdateOneRequiredWithoutValuesNestedInput = {
+    create?: XOR<JobsCreateWithoutValuesInput, JobsUncheckedCreateWithoutValuesInput>
+    connectOrCreate?: JobsCreateOrConnectWithoutValuesInput
+    upsert?: JobsUpsertWithoutValuesInput
+    connect?: JobsWhereUniqueInput
+    update?: XOR<JobsUpdateWithoutValuesInput, JobsUncheckedUpdateWithoutValuesInput>
   }
 
   export type JobsCreateNestedOneWithoutLogsInput = {
@@ -6971,6 +8184,26 @@ export namespace Prisma {
     create: XOR<JobLogsCreateWithoutJobInput, JobLogsUncheckedCreateWithoutJobInput>
   }
 
+  export type JobValuesCreateWithoutJobInput = {
+    Name: string
+    Value: string
+    DateOfValue: Date | string
+    IsDeleted?: boolean
+  }
+
+  export type JobValuesUncheckedCreateWithoutJobInput = {
+    Id?: number
+    Name: string
+    Value: string
+    DateOfValue: Date | string
+    IsDeleted?: boolean
+  }
+
+  export type JobValuesCreateOrConnectWithoutJobInput = {
+    where: JobValuesWhereUniqueInput
+    create: XOR<JobValuesCreateWithoutJobInput, JobValuesUncheckedCreateWithoutJobInput>
+  }
+
   export type JobParamsUpsertWithWhereUniqueWithoutJobInput = {
     where: JobParamsWhereUniqueInput
     update: XOR<JobParamsUpdateWithoutJobInput, JobParamsUncheckedUpdateWithoutJobInput>
@@ -7026,14 +8259,44 @@ export namespace Prisma {
     IsWarning?: BoolFilter | boolean
   }
 
+  export type JobValuesUpsertWithWhereUniqueWithoutJobInput = {
+    where: JobValuesWhereUniqueInput
+    update: XOR<JobValuesUpdateWithoutJobInput, JobValuesUncheckedUpdateWithoutJobInput>
+    create: XOR<JobValuesCreateWithoutJobInput, JobValuesUncheckedCreateWithoutJobInput>
+  }
+
+  export type JobValuesUpdateWithWhereUniqueWithoutJobInput = {
+    where: JobValuesWhereUniqueInput
+    data: XOR<JobValuesUpdateWithoutJobInput, JobValuesUncheckedUpdateWithoutJobInput>
+  }
+
+  export type JobValuesUpdateManyWithWhereWithoutJobInput = {
+    where: JobValuesScalarWhereInput
+    data: XOR<JobValuesUpdateManyMutationInput, JobValuesUncheckedUpdateManyWithoutValuesInput>
+  }
+
+  export type JobValuesScalarWhereInput = {
+    AND?: Enumerable<JobValuesScalarWhereInput>
+    OR?: Enumerable<JobValuesScalarWhereInput>
+    NOT?: Enumerable<JobValuesScalarWhereInput>
+    Id?: IntFilter | number
+    Name?: StringFilter | string
+    Value?: StringFilter | string
+    DateOfValue?: DateTimeFilter | Date | string
+    IsDeleted?: BoolFilter | boolean
+    JobId?: IntFilter | number
+  }
+
   export type JobsCreateWithoutParamsInput = {
     Name: string
     ExecuterClass: string
     ExecuteCronTime: string
+    Version?: string
     IsDeleted?: boolean
     IsActive?: boolean
     IsRunningNow?: boolean
     Logs?: JobLogsCreateNestedManyWithoutJobInput
+    Values?: JobValuesCreateNestedManyWithoutJobInput
   }
 
   export type JobsUncheckedCreateWithoutParamsInput = {
@@ -7041,10 +8304,12 @@ export namespace Prisma {
     Name: string
     ExecuterClass: string
     ExecuteCronTime: string
+    Version?: string
     IsDeleted?: boolean
     IsActive?: boolean
     IsRunningNow?: boolean
     Logs?: JobLogsUncheckedCreateNestedManyWithoutJobInput
+    Values?: JobValuesUncheckedCreateNestedManyWithoutJobInput
   }
 
   export type JobsCreateOrConnectWithoutParamsInput = {
@@ -7061,10 +8326,12 @@ export namespace Prisma {
     Name?: StringFieldUpdateOperationsInput | string
     ExecuterClass?: StringFieldUpdateOperationsInput | string
     ExecuteCronTime?: StringFieldUpdateOperationsInput | string
+    Version?: StringFieldUpdateOperationsInput | string
     IsDeleted?: BoolFieldUpdateOperationsInput | boolean
     IsActive?: BoolFieldUpdateOperationsInput | boolean
     IsRunningNow?: BoolFieldUpdateOperationsInput | boolean
     Logs?: JobLogsUpdateManyWithoutJobNestedInput
+    Values?: JobValuesUpdateManyWithoutJobNestedInput
   }
 
   export type JobsUncheckedUpdateWithoutParamsInput = {
@@ -7072,9 +8339,71 @@ export namespace Prisma {
     Name?: StringFieldUpdateOperationsInput | string
     ExecuterClass?: StringFieldUpdateOperationsInput | string
     ExecuteCronTime?: StringFieldUpdateOperationsInput | string
+    Version?: StringFieldUpdateOperationsInput | string
     IsDeleted?: BoolFieldUpdateOperationsInput | boolean
     IsActive?: BoolFieldUpdateOperationsInput | boolean
     IsRunningNow?: BoolFieldUpdateOperationsInput | boolean
+    Logs?: JobLogsUncheckedUpdateManyWithoutJobNestedInput
+    Values?: JobValuesUncheckedUpdateManyWithoutJobNestedInput
+  }
+
+  export type JobsCreateWithoutValuesInput = {
+    Name: string
+    ExecuterClass: string
+    ExecuteCronTime: string
+    Version?: string
+    IsDeleted?: boolean
+    IsActive?: boolean
+    IsRunningNow?: boolean
+    Params?: JobParamsCreateNestedManyWithoutJobInput
+    Logs?: JobLogsCreateNestedManyWithoutJobInput
+  }
+
+  export type JobsUncheckedCreateWithoutValuesInput = {
+    Id?: number
+    Name: string
+    ExecuterClass: string
+    ExecuteCronTime: string
+    Version?: string
+    IsDeleted?: boolean
+    IsActive?: boolean
+    IsRunningNow?: boolean
+    Params?: JobParamsUncheckedCreateNestedManyWithoutJobInput
+    Logs?: JobLogsUncheckedCreateNestedManyWithoutJobInput
+  }
+
+  export type JobsCreateOrConnectWithoutValuesInput = {
+    where: JobsWhereUniqueInput
+    create: XOR<JobsCreateWithoutValuesInput, JobsUncheckedCreateWithoutValuesInput>
+  }
+
+  export type JobsUpsertWithoutValuesInput = {
+    update: XOR<JobsUpdateWithoutValuesInput, JobsUncheckedUpdateWithoutValuesInput>
+    create: XOR<JobsCreateWithoutValuesInput, JobsUncheckedCreateWithoutValuesInput>
+  }
+
+  export type JobsUpdateWithoutValuesInput = {
+    Name?: StringFieldUpdateOperationsInput | string
+    ExecuterClass?: StringFieldUpdateOperationsInput | string
+    ExecuteCronTime?: StringFieldUpdateOperationsInput | string
+    Version?: StringFieldUpdateOperationsInput | string
+    IsDeleted?: BoolFieldUpdateOperationsInput | boolean
+    IsActive?: BoolFieldUpdateOperationsInput | boolean
+    IsRunningNow?: BoolFieldUpdateOperationsInput | boolean
+    Params?: JobParamsUpdateManyWithoutJobNestedInput
+    Logs?: JobLogsUpdateManyWithoutJobNestedInput
+  }
+
+  export type JobsUncheckedUpdateWithoutValuesInput = {
+    Id?: IntFieldUpdateOperationsInput | number
+    Name?: StringFieldUpdateOperationsInput | string
+    ExecuterClass?: StringFieldUpdateOperationsInput | string
+    ExecuteCronTime?: StringFieldUpdateOperationsInput | string
+    Version?: StringFieldUpdateOperationsInput | string
+    IsDeleted?: BoolFieldUpdateOperationsInput | boolean
+    IsActive?: BoolFieldUpdateOperationsInput | boolean
+    IsRunningNow?: BoolFieldUpdateOperationsInput | boolean
+    Params?: JobParamsUncheckedUpdateManyWithoutJobNestedInput
     Logs?: JobLogsUncheckedUpdateManyWithoutJobNestedInput
   }
 
@@ -7082,10 +8411,12 @@ export namespace Prisma {
     Name: string
     ExecuterClass: string
     ExecuteCronTime: string
+    Version?: string
     IsDeleted?: boolean
     IsActive?: boolean
     IsRunningNow?: boolean
     Params?: JobParamsCreateNestedManyWithoutJobInput
+    Values?: JobValuesCreateNestedManyWithoutJobInput
   }
 
   export type JobsUncheckedCreateWithoutLogsInput = {
@@ -7093,10 +8424,12 @@ export namespace Prisma {
     Name: string
     ExecuterClass: string
     ExecuteCronTime: string
+    Version?: string
     IsDeleted?: boolean
     IsActive?: boolean
     IsRunningNow?: boolean
     Params?: JobParamsUncheckedCreateNestedManyWithoutJobInput
+    Values?: JobValuesUncheckedCreateNestedManyWithoutJobInput
   }
 
   export type JobsCreateOrConnectWithoutLogsInput = {
@@ -7113,10 +8446,12 @@ export namespace Prisma {
     Name?: StringFieldUpdateOperationsInput | string
     ExecuterClass?: StringFieldUpdateOperationsInput | string
     ExecuteCronTime?: StringFieldUpdateOperationsInput | string
+    Version?: StringFieldUpdateOperationsInput | string
     IsDeleted?: BoolFieldUpdateOperationsInput | boolean
     IsActive?: BoolFieldUpdateOperationsInput | boolean
     IsRunningNow?: BoolFieldUpdateOperationsInput | boolean
     Params?: JobParamsUpdateManyWithoutJobNestedInput
+    Values?: JobValuesUpdateManyWithoutJobNestedInput
   }
 
   export type JobsUncheckedUpdateWithoutLogsInput = {
@@ -7124,10 +8459,12 @@ export namespace Prisma {
     Name?: StringFieldUpdateOperationsInput | string
     ExecuterClass?: StringFieldUpdateOperationsInput | string
     ExecuteCronTime?: StringFieldUpdateOperationsInput | string
+    Version?: StringFieldUpdateOperationsInput | string
     IsDeleted?: BoolFieldUpdateOperationsInput | boolean
     IsActive?: BoolFieldUpdateOperationsInput | boolean
     IsRunningNow?: BoolFieldUpdateOperationsInput | boolean
     Params?: JobParamsUncheckedUpdateManyWithoutJobNestedInput
+    Values?: JobValuesUncheckedUpdateManyWithoutJobNestedInput
   }
 
   export type VaultValuesUpdateWithoutTypeInput = {
@@ -7194,6 +8531,29 @@ export namespace Prisma {
     ExecuteTime?: DateTimeFieldUpdateOperationsInput | Date | string
     IsError?: BoolFieldUpdateOperationsInput | boolean
     IsWarning?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type JobValuesUpdateWithoutJobInput = {
+    Name?: StringFieldUpdateOperationsInput | string
+    Value?: StringFieldUpdateOperationsInput | string
+    DateOfValue?: DateTimeFieldUpdateOperationsInput | Date | string
+    IsDeleted?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type JobValuesUncheckedUpdateWithoutJobInput = {
+    Id?: IntFieldUpdateOperationsInput | number
+    Name?: StringFieldUpdateOperationsInput | string
+    Value?: StringFieldUpdateOperationsInput | string
+    DateOfValue?: DateTimeFieldUpdateOperationsInput | Date | string
+    IsDeleted?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type JobValuesUncheckedUpdateManyWithoutValuesInput = {
+    Id?: IntFieldUpdateOperationsInput | number
+    Name?: StringFieldUpdateOperationsInput | string
+    Value?: StringFieldUpdateOperationsInput | string
+    DateOfValue?: DateTimeFieldUpdateOperationsInput | Date | string
+    IsDeleted?: BoolFieldUpdateOperationsInput | boolean
   }
 
 

@@ -1,13 +1,20 @@
 import { CrokerCrawler } from "../../web-crawlers/CrokerCrawler";
-import { CrokerJobs } from "../CrokerJobs";
-import { PrismaClient } from '../../prisma-client';
+import { CrokerJobs } from "../../jobs-base/CrokerJobs";
+import { Jobs, PrismaClient } from '../../prisma-client';
 
 export class BistStaticValueGetter extends CrokerJobs{
+    
+    public Name: string = "BIST Daily Values Getter";
+    public ExecuterClass = "BistStaticValueGetter";
+    public ExecuteCronTime = "00 19 * * 1-6";
+    public Version = "1.0.0";
+    
 
-
-    constructor(JobName:string){
-        super(JobName);
+    public async Install(Job:Jobs)  {
+        this.AddParam("URL","https://www.finnet.com.tr/f2000/endeks/EndeksAnaliz.aspx")
+        this.AddParam("HttpMethod","GET")
     }
+
     public async Run(BaseJob:CrokerJobs) {
         
         let crawler:CrokerCrawler = new CrokerCrawler();

@@ -1,13 +1,19 @@
 import { CrokerCrawler } from "../../web-crawlers/CrokerCrawler";
-import { CrokerJobs } from "../CrokerJobs";
-import { PrismaClient } from '../../prisma-client';
+import { CrokerJobs } from "../../jobs-base/CrokerJobs";
+import { Jobs, PrismaClient } from '../../prisma-client';
 
 export class ZiraatFaizValueGetter extends CrokerJobs{
 
-
-    constructor(JobName:string){
-        super(JobName);
+    public Name = "Ziraat Daily Faiz Values Getter";
+    public ExecuterClass = "ZiraatFaizValueGetter";
+    public ExecuteCronTime = "* * * * * *";
+    public Version = "1.0.0";
+    
+    public async Install(Job:Jobs){
+        this.AddParam("URL","https://www.ziraatbank.com.tr/tr/fiyatlar-ve-oranlar")
+        this.AddParam("HttpMethod","GET")
     }
+
     public async Run(BaseJob:CrokerJobs) {
         
         let crawler:CrokerCrawler = new CrokerCrawler();

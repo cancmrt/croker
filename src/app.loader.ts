@@ -1,4 +1,4 @@
-import { JobsRunner } from "./jobs/JobsRunner";
+import { JobsRunner } from "./jobs-base/JobsRunner";
 global.InitializedCrokerJobs = [];
 
 export class Loader {

@@ -106,11 +106,21 @@ exports.Prisma.JobParamsScalarFieldEnum = makeEnum({
   JobId: 'JobId'
 });
 
+exports.Prisma.JobValuesScalarFieldEnum = makeEnum({
+  Id: 'Id',
+  Name: 'Name',
+  Value: 'Value',
+  DateOfValue: 'DateOfValue',
+  IsDeleted: 'IsDeleted',
+  JobId: 'JobId'
+});
+
 exports.Prisma.JobsScalarFieldEnum = makeEnum({
   Id: 'Id',
   Name: 'Name',
   ExecuterClass: 'ExecuterClass',
   ExecuteCronTime: 'ExecuteCronTime',
+  Version: 'Version',
   IsDeleted: 'IsDeleted',
   IsActive: 'IsActive',
   IsRunningNow: 'IsRunningNow'
@@ -146,6 +156,7 @@ exports.Prisma.ModelName = makeEnum({
   VaultValues: 'VaultValues',
   Jobs: 'Jobs',
   JobParams: 'JobParams',
+  JobValues: 'JobValues',
   JobLogs: 'JobLogs'
 });
 

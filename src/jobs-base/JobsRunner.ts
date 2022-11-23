@@ -23,7 +23,7 @@ export class JobsRunner{
         });
 
         allJobs.forEach((job)=>{
-            import("./croker-jobs/"+job.ExecuterClass)
+            import("../jobs/"+job.ExecuterClass+"/"+job.ExecuterClass)
             .then(async jobClass => {
                 let createdClass = new jobClass[job.ExecuterClass](job.Name);
                 await createdClass.Start();
