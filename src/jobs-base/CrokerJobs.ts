@@ -24,6 +24,21 @@ export abstract class CrokerJobs{
         this.Client = new PrismaClient();
     }
 
+    private async Init() {
+        await this.Client?.$connect();
+        this.Job = await this.Client?.jobs.findFirstOrThrow({
+            where:{
+                Name:{
+                    equals: this.Name
+                }
+            },
+            include:{
+                Params:true
+            }
+        });
+        await this.Client?.$disconnect();
+    }
+
     public async SystemInstaller(){
         await this.Client?.$connect();
         let jobFinded = await this.Client?.jobs.findFirst({
@@ -72,7 +87,7 @@ export abstract class CrokerJobs{
             
         }
         else{
-            if(jobFinded.Version !== this.Version || jobFinded.ExecuterClass !== this.ExecuterClass){
+            if(jobFinded.Version !== this.Version || jobFinded.ExecuterClass !== this.ExecuterClass || jobFinded.ExecuteCronTime !== this.ExecuteCronTime){
                 await JobsLogger.Info(this.Name,"Job "+this.Name+" old version detected");
                 try{
                     await this.Install(jobFinded);
@@ -101,9 +116,9 @@ export abstract class CrokerJobs{
         
     }
 
-    private async Init() {
+    public async AddValue(Name:string, Value:string, Date:Date){
         await this.Client?.$connect();
-        this.Job = await this.Client?.jobs.findFirstOrThrow({
+        let findedJob = await this.Client?.jobs.findFirstOrThrow({
             where:{
                 Name:{
                     equals: this.Name
@@ -111,6 +126,28 @@ export abstract class CrokerJobs{
             },
             include:{
                 Params:true
+            }
+        });
+        await this.Client?.jobValues.create({
+            data:{
+                Name:Name,
+                Value:Value,
+                DateOfValue:Date,
+                JobId:findedJob?.Id || 0,
+
+            }
+        });
+        await this.Client?.$disconnect();
+    }
+    public async RemoveValue(ValueId:number){
+        await this.Client?.$connect();
+        
+        await this.Client?.jobValues.update({
+            where:{
+                Id:ValueId
+            },
+            data:{
+                IsDeleted:true
             }
         });
         await this.Client?.$disconnect();
@@ -249,6 +286,7 @@ export abstract class CrokerJobs{
             throw Error("Bulunamayan job durdurulamaz");
         }
     }
+
     public abstract Install(Job:Jobs): Promise<void>;
     public abstract Run(BaseJob:CrokerJobs): Promise<void>;
     public abstract Completed(BaseJob:CrokerJobs): Promise<void>;

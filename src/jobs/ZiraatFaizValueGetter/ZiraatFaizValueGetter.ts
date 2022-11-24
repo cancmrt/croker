@@ -6,12 +6,12 @@ export class ZiraatFaizValueGetter extends CrokerJobs{
 
     public Name = "Ziraat Daily Faiz Values Getter";
     public ExecuterClass = "ZiraatFaizValueGetter";
-    public ExecuteCronTime = "* * * * * *";
+    public ExecuteCronTime = "00 19 * * 1-6";
     public Version = "1.0.0";
     
     public async Install(Job:Jobs){
-        this.AddParam("URL","https://www.ziraatbank.com.tr/tr/fiyatlar-ve-oranlar")
-        this.AddParam("HttpMethod","GET")
+        await this.AddParam("URL","https://www.ziraatbank.com.tr/tr/fiyatlar-ve-oranlar")
+        await this.AddParam("HttpMethod","GET")
     }
 
     public async Run(BaseJob:CrokerJobs) {
@@ -23,8 +23,13 @@ export class ZiraatFaizValueGetter extends CrokerJobs{
         }
         let $ = result.Document
 
-        let MainTableForFaiz = $('*[data-id="rdIntBranchVadeliTL"] table tbody tr td:first-child').toArray()
-        let FaizValueIndex = MainTableForFaiz.findIndex(el => crawler.RemoveTagAndWhiteSpaces($(el).text()) == "30 - 31 gün arası");
+        let MainTableForFaiz = $('*[data-id="rdIntBranchVadeliTL"] table tbody tr');
+        let FaizValueIndex = $(MainTableForFaiz).find("td:nth-child(1)").toArray().findIndex(el => crawler.RemoveTagAndWhiteSpaces($(el).text()) == "30 - 31 gün arası");
+        let FaizValueEl = $(MainTableForFaiz).find("td:nth-child(2)").toArray()[FaizValueIndex];
+        let FaizValue = crawler.RemoveTagAndWhiteSpaces($(FaizValueEl).text()).replaceAll("%","").replaceAll(",",".");
+        let FaizValueNumber = Number(FaizValue);
+        await this.AddValue("Faiz",FaizValueNumber.toLocaleString("tr-TR"),new Date());
+        await this.AddValue("Baz-Faiz",(100 / (100 * (FaizValueNumber/100))).toLocaleString("tr-TR"),new Date());
 
     }
     public async Completed(BaseJob:CrokerJobs){

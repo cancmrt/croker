@@ -11,8 +11,8 @@ export class BistStaticValueGetter extends CrokerJobs{
     
 
     public async Install(Job:Jobs)  {
-        this.AddParam("URL","https://www.finnet.com.tr/f2000/endeks/EndeksAnaliz.aspx")
-        this.AddParam("HttpMethod","GET")
+        await this.AddParam("URL","https://www.finnet.com.tr/f2000/endeks/EndeksAnaliz.aspx")
+        await this.AddParam("HttpMethod","GET")
     }
 
     public async Run(BaseJob:CrokerJobs) {
@@ -29,39 +29,12 @@ export class BistStaticValueGetter extends CrokerJobs{
 
 
         let ValuesArray = $(".ozetbaslikdata").toArray()
-        let FKValue = crawler.RemoveTagAndWhiteSpaces($(ValuesArray[FKBaslikIndex]).find("span").text());
-        let PDDDValue = crawler.RemoveTagAndWhiteSpaces($(ValuesArray[PDDDBaslikIndex]).find("span").text());
+        let FKValue = Number(crawler.RemoveTagAndWhiteSpaces($(ValuesArray[FKBaslikIndex]).find("span").text()));
+        let PDDDValue = Number(crawler.RemoveTagAndWhiteSpaces($(ValuesArray[PDDDBaslikIndex]).find("span").text()));
 
-        let client = new PrismaClient();
-        await client.$connect();
-        let SelectedVault = await client.vaultType.findFirstOrThrow({
-            where:{
-                Name:{
-                    equals: "BIST100"
-                }
-            }
-        });
+        await this.AddValue("F/K",FKValue.toLocaleString("tr-TR"),new Date());
+        await this.AddValue("PD/DD",PDDDValue.toLocaleString("tr-TR"),new Date());
         
-        await client.vaultValues.create({
-            data:{
-                Name:"F/K",
-                DateOfValue: new Date(),
-                VaultTypeId: SelectedVault.Id,
-                Value:FKValue
-
-            }
-        });
-        await client.vaultValues.create({
-            data:{
-                Name:"PD/DD",
-                DateOfValue: new Date(),
-                VaultTypeId: SelectedVault.Id,
-                Value:PDDDValue
-
-            }
-        });
-        await client.$disconnect();
-
     }
     public async Completed(BaseJob:CrokerJobs){
         console.log("completed");
