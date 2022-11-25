@@ -2,6 +2,8 @@
 import { Jobs, Prisma, PrismaClient } from '../prisma-client'
 import { CronJob } from 'cron';
 import { JobsLogger } from './JobsLogger';
+import * as fs from 'fs';
+import * as path from 'path'
 
 
 export abstract class CrokerJobs{
@@ -77,6 +79,7 @@ export abstract class CrokerJobs{
                 if(createdJob === undefined){
                     throw Error("Job database seviyesinde yaratılamadı...");
                 }
+                this.SqlFileRunner("install");
                 await JobsLogger.Info(this.Name,"Job "+this.Name+" Version: "+this.Version+" pre-installation successfully");
                 await this.Install(createdJob);
                 await JobsLogger.Info(this.Name,"Job "+this.Name+" Version: "+this.Version+" installed greacfully");
@@ -104,6 +107,7 @@ export abstract class CrokerJobs{
                         },
                     });
                     await this.Client?.$disconnect();
+                    this.SqlFileRunner("update");
                     await JobsLogger.Info(this.Name,"Job "+this.Name+" new version installed greacfully");
                 }
                 catch(ex){
@@ -115,6 +119,56 @@ export abstract class CrokerJobs{
         }
         
     }
+    private async SqlFileRunner(FileName:string){
+        try{
+            let directoryExist = fs.existsSync(path.join(__dirname, '../jobs/' + this.ExecuterClass + "/sql/"));
+            if (directoryExist) {
+                const rawSql = await fs.promises.readFile(path.join(__dirname, '../jobs/'+this.ExecuterClass+"/sql/"+FileName+".sql"), {
+                    encoding: 'utf-8',
+                });
+                const sqlReducedToStatements = rawSql
+                    .split('\n')
+                    .filter((line) => !line.startsWith('--')) // remove comments-only lines
+                    .join('\n')
+                    .replace(/\r\n|\n|\r/g, ' ') // remove newlines
+                    .replace(/\s+/g, ' '); // excess white space
+                const sqlStatements = this.splitStringByNotQuotedSemicolon(sqlReducedToStatements);
+                this.Client?.$connect();
+                for (const sql of sqlStatements) {
+                    await this.Client?.$executeRawUnsafe(sql);
+                }
+            }
+            
+        }
+        catch(ex){
+            console.error(ex);
+            process.exit(1);
+        }
+        finally{
+            this.Client?.$disconnect();
+        }
+        
+    }
+
+    private splitStringByNotQuotedSemicolon(input: string): string[] {
+        const result = [];
+      
+        let currentSplitIndex = 0;
+        let isInString = false;
+        for (let i = 0; i < input.length; i++) {
+          if (input[i] === "'") {
+            // toggle isInString
+            isInString = !isInString;
+          }
+          if (input[i] === ';' && !isInString) {
+            result.push(input.substring(currentSplitIndex, i + 1));
+            currentSplitIndex = i + 2;
+          }
+        }
+      
+        return result;
+      }
+      
 
     public async AddValue(Name:string, Value:string, Date:Date){
         await this.Client?.$connect();

@@ -1,6 +1,6 @@
 import { CrokerCrawler } from "../../web-crawlers/CrokerCrawler";
 import { CrokerJobs } from "../../jobs-base/CrokerJobs";
-import { Jobs, PrismaClient } from '../../prisma-client';
+import { Jobs } from '../../prisma-client';
 
 export class BistStaticValueGetter extends CrokerJobs{
     
