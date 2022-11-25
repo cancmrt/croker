@@ -121,14 +121,14 @@ export abstract class CrokerJobs{
     }
     private async SqlFileRunner(FileName:string){
         try{
-            let directoryExist = fs.existsSync(path.join(__dirname, '../jobs/' + this.ExecuterClass + "/sql/"));
+            let sqlPath = path.join(__dirname, '../jobs/' + this.ExecuterClass + "/sql");
+            let directoryExist = fs.existsSync(sqlPath);
             if (directoryExist) {
-                const rawSql = await fs.promises.readFile(path.join(__dirname, '../jobs/'+this.ExecuterClass+"/sql/"+FileName+".sql"), {
-                    encoding: 'utf-8',
-                });
+                let rawSql = await import(path.join(__dirname, '../jobs/'+this.ExecuterClass+"/sql/"+FileName));
+                rawSql = rawSql[FileName]
                 const sqlReducedToStatements = rawSql
                     .split('\n')
-                    .filter((line) => !line.startsWith('--')) // remove comments-only lines
+                    .filter((line: string) => !line.startsWith('--')) // remove comments-only lines
                     .join('\n')
                     .replace(/\r\n|\n|\r/g, ' ') // remove newlines
                     .replace(/\s+/g, ' '); // excess white space
