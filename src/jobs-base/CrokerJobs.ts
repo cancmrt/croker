@@ -1,5 +1,5 @@
 
-import { Jobs, Prisma, PrismaClient } from '../prisma-client'
+import { Jobs, Prisma, PrismaClient,JobParams } from '../prisma-client'
 import { CronJob } from 'cron';
 import { JobsLogger } from './JobsLogger';
 import * as fs from 'fs';
@@ -30,9 +30,15 @@ export abstract class CrokerJobs{
         await this.Client?.$connect();
         this.Job = await this.Client?.jobs.findFirstOrThrow({
             where:{
-                Name:{
-                    equals: this.Name
+                AND:{
+                    Name:{
+                        equals: this.Name
+                    },
+                    IsDeleted:{
+                        equals:false
+                    }
                 }
+                
             },
             include:{
                 Params:true
@@ -52,11 +58,7 @@ export abstract class CrokerJobs{
                     IsDeleted:{
                         equals: false
                     }
-                }
-                
-            },
-            include:{
-                Params:true
+                } 
             }
         });
         await this.Client?.$disconnect();
@@ -107,7 +109,7 @@ export abstract class CrokerJobs{
                         },
                     });
                     await this.Client?.$disconnect();
-                    this.SqlFileRunner("update");
+                    await this.SqlFileRunner("update");
                     await JobsLogger.Info(this.Name,"Job "+this.Name+" new version installed greacfully");
                 }
                 catch(ex){
@@ -174,8 +176,13 @@ export abstract class CrokerJobs{
         await this.Client?.$connect();
         let findedJob = await this.Client?.jobs.findFirstOrThrow({
             where:{
-                Name:{
-                    equals: this.Name
+                AND:{
+                    Name:{
+                        equals: this.Name
+                    },
+                    IsDeleted:{
+                        equals:false
+                    }
                 }
             },
             include:{
@@ -206,27 +213,72 @@ export abstract class CrokerJobs{
         });
         await this.Client?.$disconnect();
     }
+    public async GetParam(Name:string):Promise<JobParams | undefined>{
+        await this.Client?.$connect();
+        let findedParam = await this.Client?.jobParams.findFirstOrThrow({
+            where:{
+                AND:{
+                    Name:{
+                        equals:Name
+                    },
+                    IsDeleted:{
+                        equals:false
+                    }
+                }
+            }
+        });
+        await this.Client?.$disconnect();
+        return findedParam;
+    }
 
     public async AddParam(Name:string,Value:string){
         await this.Client?.$connect();
         let findedJob = await this.Client?.jobs.findFirstOrThrow({
             where:{
-                Name:{
-                    equals: this.Name
+                AND:{
+                    Name:{
+                        equals: this.Name
+                    },
+                    IsDeleted:{
+                        equals:false
+                    }
                 }
-            },
-            include:{
-                Params:true
             }
         });
-        await this.Client?.jobParams.create({
-            data:{
-                Name:Name,
-                Value:Value,
-                IsDeleted: false,
-                JobId:findedJob?.Id || 0
+        let findedParam = await this.Client?.jobParams.findFirstOrThrow({
+            where:{
+                AND:{
+                    Name:{
+                        equals: Name
+                    },
+                    JobId:{
+                        equals:findedJob?.Id
+                    }
+                }
+                
             }
         });
+        if(findedParam !== undefined){
+            await this.Client?.jobParams.update({
+                where:{
+                    Id:findedParam.Id
+                },
+                data:{
+                    Name:Name,
+                    Value:Value
+                }
+            })
+        }
+        else{
+            await this.Client?.jobParams.create({
+                data:{
+                    Name:Name,
+                    Value:Value,
+                    IsDeleted: false,
+                    JobId:findedJob?.Id || 0
+                }
+            });
+        }
         await this.Client?.$disconnect();
         
     }
@@ -234,12 +286,14 @@ export abstract class CrokerJobs{
         await this.Client?.$connect();
         let findedJob = await this.Client?.jobs.findFirstOrThrow({
             where:{
-                Name:{
-                    equals: this.Name
+                AND:{
+                    Name:{
+                        equals: this.Name
+                    },
+                    IsDeleted:{
+                        equals:false
+                    }
                 }
-            },
-            include:{
-                Params:true
             }
         });
         let findedParam = await this.Client?.jobParams.findFirstOrThrow({
@@ -288,7 +342,7 @@ export abstract class CrokerJobs{
                     await JobsLogger.Info(this.Job?.Name || "","Job " + this.Job?.Name + " Run Start...")
                     
                     try{
-                        this.Run(this);
+                        await this.Run(this);
                         await JobsLogger.Info(this.Job?.Name || "","Job " + this.Job?.Name + " Run End...")
                         
                     }
@@ -307,7 +361,7 @@ export abstract class CrokerJobs{
                     });
                     await this.Client?.$disconnect();
                 },async () => {
-                    this.Completed(this);
+                    await this.Completed(this);
                     await JobsLogger.Info(this.Job?.Name || "","Job " + this.Job?.Name + " End Greacfully")
                 });
             }

@@ -22,7 +22,14 @@ export class Loader {
         process.on('SIGUSR2', this.exitHandler);
 
         //catches uncaught exceptions
-        process.on('uncaughtException', this.exitHandler);
+        process.on('uncaughtException', async err => {
+            console.log(err);
+            for await (const job of global.InitializedCrokerJobs) {
+                await job.Stop();
+            };
+            process.exit(0);
+            
+        });
     }
     async exitHandler() {
         for await (const job of global.InitializedCrokerJobs) {
