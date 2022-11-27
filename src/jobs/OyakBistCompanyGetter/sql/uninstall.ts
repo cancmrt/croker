@@ -1,1 +1,1 @@
-export const uninstall =  `DROP TABLE "BISTCompanies`;
+export const uninstall =  `DROP TABLE "BISTCompanies"`;
