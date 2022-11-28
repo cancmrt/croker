@@ -2,6 +2,7 @@ import axios from "axios";
 import { CrokerJobs } from "../../jobs-base/CrokerJobs";
 import { Jobs, PrismaClient } from "../../prisma-client";
 import { BISTCompany } from "../OyakBistCompanyGetter/OyakBistCompanyGetter";
+import moment from 'moment';
 
 export class KapCompanyNotifyCollector extends CrokerJobs{
     public Name: string = "KAP Company Notify Collector";
@@ -24,7 +25,22 @@ export class KapCompanyNotifyCollector extends CrokerJobs{
                 let KAPPageResult =  await axios.get(KAPLink, {headers: {
                     'Content-Type': 'application/json',
                 },timeout: 60000});
-                // gelen notify dataları veritabanına işlenecek
+                for await(let notification of KAPPageResult.data){
+                    let noti:BISTCompanyNotifications = {
+                        Id:0,
+                        KAPMemberId:company.KAPMemberId,
+                        NotifyId:notification.basic.disclosureIndex,
+                        Class:notification.basic.disclosureClass,
+                        Type:notification.basic.disclosureType,
+                        Category:notification.basic.disclosureCategory,
+                        PublishDate:moment(notification.basic.publishDate,"DD.MM.YYYY HH:MM").toDate(),
+                        Title:notification.basic.title,
+                        Summary:notification.basic.summary
+
+
+                    };
+                    allNotifications.push(noti);
+                }
             }
         }
     }

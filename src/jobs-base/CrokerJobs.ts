@@ -221,6 +221,9 @@ export abstract class CrokerJobs{
                     Name:{
                         equals:Name
                     },
+                    JobId:{
+                        equals:this.Job?.Id
+                    },
                     IsDeleted:{
                         equals:false
                     }
@@ -245,7 +248,7 @@ export abstract class CrokerJobs{
                 }
             }
         });
-        let findedParam = await this.Client?.jobParams.findFirstOrThrow({
+        let findedParam = await this.Client?.jobParams.findFirst({
             where:{
                 AND:{
                     Name:{
@@ -258,7 +261,7 @@ export abstract class CrokerJobs{
                 
             }
         });
-        if(findedParam !== undefined){
+        if(findedParam != undefined){
             await this.Client?.jobParams.update({
                 where:{
                     Id:findedParam.Id
