@@ -1,3 +1,3 @@
-import {Start} from 'croker-base/app.core.js';
+import { Start } from 'croker-base/app.core.js'
 
-await Start();
+await Start()

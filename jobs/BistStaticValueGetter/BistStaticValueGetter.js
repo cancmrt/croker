@@ -1,6 +1,6 @@
-import { CrawlerLoader, CrokerCrawler, HttpMethodType } from '../../app.crawler.context.js'
-import { CrokerJobs } from '../../app.jobs.context.js'
-import { DataTypes, Context } from '../../app.dbcontext.js'
+import { CrawlerLoader, CrokerCrawler, HttpMethodType } from 'croker-base/app.crawler.context.js'
+import { CrokerJobs } from 'croker-base/app.jobs.context.js'
+import { DataTypes, Context } from 'croker-base/app.dbcontext.js'
 
 export class BistStaticValueGetter extends CrokerJobs {
   constructor () {
