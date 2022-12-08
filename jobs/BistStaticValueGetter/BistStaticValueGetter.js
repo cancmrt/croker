@@ -7,7 +7,7 @@ export class BistStaticValueGetter extends CrokerJobs {
     super(
       'BIST Daily Values Getter',
       'BistStaticValueGetter',
-      '* * * * *',
+      '00 19 * * 1-6',
       '1.0.0'
     )
   }
