@@ -1,0 +1,10 @@
+{
+    "Type":"Job",
+    "Name":"BistStaticValueGetter",
+    "Config":{
+        "Version":"1.0.0",
+        "SPoint":"BistStaticValueGetter.js",
+        "SPointClass":"BistStaticValueGetter",
+        "JobCronTime":"* * * * *"
+    }
+}

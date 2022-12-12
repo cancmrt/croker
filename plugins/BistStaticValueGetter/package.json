@@ -1,0 +1,17 @@
+{
+  "name": "croker-biststaticvaluegetter",
+  "version": "1.0.0",
+  "description": "bist time base value getter in job",
+  "type": "module",
+  "main": "BistStaticValueGetter.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "bist",
+    "fk",
+    "pd/dd"
+  ],
+  "author": "cancmrt",
+  "license": "ISC"
+}

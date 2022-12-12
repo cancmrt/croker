@@ -3,12 +3,10 @@ import { CrokerJobs } from 'croker-base/app.jobs.context.js'
 import { DataTypes, Context } from 'croker-base/app.dbcontext.js'
 
 export class BistStaticValueGetter extends CrokerJobs {
-  constructor () {
+  // eslint-disable-next-line no-useless-constructor
+  constructor (Plugin) {
     super(
-      'BIST Daily Values Getter',
-      'BistStaticValueGetter',
-      '00 19 * * 1-6',
-      '1.0.0'
+      Plugin
     )
   }
 

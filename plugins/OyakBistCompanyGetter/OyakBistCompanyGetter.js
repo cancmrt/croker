@@ -3,12 +3,10 @@ import { CrawlerLoader, CrokerCrawler, HttpMethodType } from 'croker-base/app.cr
 import { DataTypes, Context } from 'croker-base/app.dbcontext.js'
 
 export class OyakBistCompanyGetter extends CrokerJobs {
-  constructor () {
+  // eslint-disable-next-line no-useless-constructor
+  constructor (Plugin) {
     super(
-      'Oyak Bist Company Getter',
-      'OyakBistCompanyGetter',
-      '* * * * *',
-      '1.0.0'
+      Plugin
     )
   }
 

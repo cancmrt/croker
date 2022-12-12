@@ -1,0 +1,10 @@
+{
+    "Type":"Job",
+    "Name":"OyakBistCompanyGetter",
+    "Config":{
+        "Version":"1.0.0",
+        "SPoint":"OyakBistCompanyGetter.js",
+        "SPointClass":"OyakBistCompanyGetter",
+        "JobCronTime":"* * * * *"
+    }
+}
