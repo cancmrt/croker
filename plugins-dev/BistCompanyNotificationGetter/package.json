@@ -1,0 +1,16 @@
+{
+  "name": "croker-bistcompanynotificationgetter",
+  "version": "1.0.0",
+  "description": "bist company notification collecyor",
+  "main": "BistCompanyNotificationGetter.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "kap",
+    "notifications",
+    "bist"
+  ],
+  "author": "cancmrt",
+  "license": "ISC"
+}

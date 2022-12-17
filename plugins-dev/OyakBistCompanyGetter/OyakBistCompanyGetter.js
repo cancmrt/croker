@@ -2,6 +2,29 @@ import { CrokerJobs } from 'croker-base/app.jobs.context.js'
 import { CrawlerLoader, CrokerCrawler, HttpMethodType } from 'croker-base/app.crawler.context.js'
 import { DataTypes, Context } from 'croker-base/app.dbcontext.js'
 
+export const BistCompaniesModel = Context.define('BISTCompanies', {
+  Id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  Name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: ''
+  },
+  Symbol: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: ''
+  },
+  KAPMemberId: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: ''
+  }
+})
+
 export class OyakBistCompanyGetter extends CrokerJobs {
   // eslint-disable-next-line no-useless-constructor
   constructor (Plugin) {
@@ -9,29 +32,6 @@ export class OyakBistCompanyGetter extends CrokerJobs {
       Plugin
     )
   }
-
-  BistCompaniesModel = Context.define('BISTCompanies', {
-    Id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
-    },
-    Name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      defaultValue: ''
-    },
-    Symbol: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      defaultValue: ''
-    },
-    KAPMemberId: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      defaultValue: ''
-    }
-  })
 
   async Install (Job) {
     await Context.sync()
@@ -66,13 +66,13 @@ export class OyakBistCompanyGetter extends CrokerJobs {
           const KAPSearchObj = KAPPageResult.JSON
           KapMemberId = KAPSearchObj[0].mkkMemberOid
         }
-        const findedBistCompany = await this.BistCompaniesModel.findOne({
+        const findedBistCompany = await BistCompaniesModel.findOne({
           where: {
             Symbol: SymbolOfCompany
           }
         })
         if (findedBistCompany !== null) {
-          await this.BistCompaniesModel.update(
+          await BistCompaniesModel.update(
             {
               Name: NameOfCompany,
               Symbol: SymbolOfCompany,
@@ -84,7 +84,7 @@ export class OyakBistCompanyGetter extends CrokerJobs {
               }
             })
         } else {
-          await this.BistCompaniesModel.create(
+          await BistCompaniesModel.create(
             {
               Name: NameOfCompany,
               Symbol: SymbolOfCompany,

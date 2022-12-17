@@ -32,6 +32,7 @@
   "dependencies": {
     "croker-base": "file:croker-base-1.0.0.tgz",
     "croker-biststaticvaluegetter": "file:plugins/croker-biststaticvaluegetter-1.0.0.tgz",
+    "moment": "^2.29.4",
     "oyakbistcompanygetter": "file:plugins/oyakbistcompanygetter-1.0.0.tgz"
   }
 }

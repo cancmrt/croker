@@ -1,0 +1,13 @@
+{
+    "Type":"Job",
+    "Name":"BistCompanyNotificationGetter",
+    "Config":{
+        "Version":"1.0.0",
+        "SPoint":"BistCompanyNotificationGetter.js",
+        "SPointClass":"BistCompanyNotificationGetter",
+        "JobCronTime":"* * * * *",
+        "Depent":[
+            "croker-biststaticvaluegetter"
+        ]
+    }
+}
