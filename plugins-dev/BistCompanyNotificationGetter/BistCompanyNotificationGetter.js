@@ -1,7 +1,7 @@
 import { CrokerJobs } from 'croker-base/app.jobs.context.js'
 import { CrawlerLoader, CrokerCrawler, HttpMethodType } from 'croker-base/app.crawler.context.js'
 import { DataTypes, Context } from 'croker-base/app.dbcontext.js'
-import { BistCompaniesModel } from '../OyakBistCompanyGetter/OyakBistCompanyGetter'
+import { BistCompaniesModel } from '../OyakBistCompanyGetter/OyakBistCompanyGetter.js'
 import moment from 'moment'
 
 const BistCompaniesNotificationsModel = Context.define('BistCompaniesNotifications', {
@@ -40,11 +40,11 @@ const BistCompaniesNotificationsModel = Context.define('BistCompaniesNotificatio
   },
   Title: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   Summary: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   }
 })
 
@@ -78,7 +78,7 @@ export class BistCompanyNotificationGetter extends CrokerJobs {
         }
         const CompanyNotifications = result.JSON
         for await (const noti of CompanyNotifications) {
-          const findedNoti = BistCompaniesNotificationsModel.findOne({
+          const findedNoti = await BistCompaniesNotificationsModel.findOne({
             where: {
               KAPNotifyId: noti.basic.disclosureId
             }
@@ -87,12 +87,12 @@ export class BistCompanyNotificationGetter extends CrokerJobs {
             await BistCompaniesNotificationsModel.create(
               {
                 CompanyId: company.Id,
-                KapMemberId: company.KapMemberId,
+                KAPMemberId: company.KAPMemberId,
                 KAPNotifyId: noti.basic.disclosureId,
                 KAPClass: noti.basic.disclosureClass,
                 KAPType: noti.basic.disclosureType,
                 KAPCategory: noti.basic.disclosureCategory,
-                PublishDate: moment(noti.basic.publishDate, 'DD.MM.YYYY HH:MM').toDate(),
+                PublishDate: moment(noti.basic.publishDate, 'DD.MM.YY HH:MM').toDate(),
                 Title: noti.basic.title,
                 Summary: noti.basic.summary
               })
